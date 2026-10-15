@@ -6,27 +6,28 @@
 <meta name="theme-color" content="#09090b">
 <title>Gestão Inho Dú Corte</title>
 <style>
-:root{--bg:#09090b;--panel:#151517;--panel2:#202024;--gold:#d4af37;--gold2:#f5df91;--white:#f7f7f8;--muted:#a0a0aa;--red:#ff727c;--green:#65dda0;--border:#303035}
+:root{--bg:#09090b;--panel:#171719;--panel2:#222226;--gold:#d4af37;--gold2:#f5df91;--white:#f7f7f8;--muted:#a0a0aa;--red:#ff727c;--green:#65dda0;--border:#35353b}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,system-ui,sans-serif}
 button,input,select,textarea{font:inherit}
-header{padding:16px;background:linear-gradient(135deg,#202024,#09090b);border-bottom:1px solid #514322;position:sticky;top:0;z-index:20}
+header{padding:15px;background:linear-gradient(135deg,#252528,#09090b);border-bottom:1px solid #655124;position:sticky;top:0;z-index:20}
 .brandline{display:flex;align-items:center;gap:12px}
 .brandmark{width:44px;height:44px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold2);font-size:23px;background:#211d12}
-.brand{font-weight:900;color:var(--gold2);font-size:21px}
-.subtitle{color:var(--muted);font-size:11px;margin-top:5px}
-nav{display:flex;gap:7px;padding:10px;background:#101012;border-bottom:1px solid var(--border);overflow-x:auto}
-button{border:1px solid #39393f;border-radius:10px;background:#252529;color:var(--white);padding:11px 13px;font-weight:700;cursor:pointer}
+.brand{font-size:clamp(15px,4vw,24px);font-weight:900;color:var(--gold2)}
+.subtitle{font-size:11px;color:var(--muted);margin-top:5px}
+nav{display:flex;gap:7px;padding:10px;background:#101012;border-bottom:1px solid var(--border);overflow-x:auto;position:sticky;top:74px;z-index:15}
+button{border:1px solid #414147;border-radius:10px;background:#252529;color:var(--white);padding:11px 13px;font-weight:700;cursor:pointer}
 button:hover{border-color:var(--gold)}
 button.primary{background:linear-gradient(135deg,var(--gold2),var(--gold));color:#15120a;border-color:var(--gold)}
 button.danger{color:#ff9ca2;border-color:#67383c}
 button.success{color:var(--green)}
-button:disabled{opacity:.4;cursor:not-allowed}
+button:disabled{opacity:.45;cursor:not-allowed}
 nav button{white-space:nowrap;font-size:12px}
-main{max-width:1180px;margin:auto;padding:16px}
+main{max-width:1180px;margin:auto;padding:15px}
 .page{display:none}.page.active{display:block}
 h2{font-size:23px;margin:8px 0}
 h3{font-size:16px;margin:4px 0 12px}
+p{line-height:1.5}
 .intro,.muted{color:var(--muted);font-size:12px;line-height:1.5}
 .intro{margin-bottom:18px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
@@ -34,12 +35,11 @@ h3{font-size:16px;margin:4px 0 12px}
 .stat small{display:block;color:var(--muted);font-size:12px;margin-bottom:8px}
 .stat strong{font-size:clamp(17px,4vw,25px);color:var(--gold2);overflow-wrap:anywhere}
 label{display:block;font-size:12px;color:var(--muted);margin:11px 0 6px}
-input,select,textarea{width:100%;min-width:0;background:#0c0c0e;color:var(--white);border:1px solid #3b3b41;border-radius:9px;padding:12px;outline:none}
+input,select,textarea{width:100%;min-width:0;background:#0c0c0e;color:var(--white);border:1px solid #414147;border-radius:9px;padding:12px;outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--gold)}
-textarea{min-height:75px;resize:vertical}
+textarea{min-height:80px;resize:vertical}
 .row{display:grid;grid-template-columns:1fr;gap:10px}
 .actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
-.actions button{flex:0 0 auto}
 .item{display:flex;justify-content:space-between;align-items:center;gap:10px}
 .item p{font-size:12px;color:var(--muted);margin:5px 0}
 .item .right{text-align:right;min-width:75px;overflow-wrap:anywhere}
@@ -53,7 +53,7 @@ th{color:var(--gold2)}
 .tablewrap{overflow-x:auto}
 .hero{border:1px solid #55451f;background:radial-gradient(ellipse at top right,#3b3018,#141416 76%);border-radius:16px;padding:18px;margin-bottom:14px}
 .hero h2{color:var(--gold2)}
-.hero p{font-size:13px;color:#c0bdaf;line-height:1.55}
+.hero p{font-size:13px;color:#c0bdaf}
 .quick-total{display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:12px;background:#0b0b0d;border:1px solid #49402a;margin-top:14px;gap:10px}
 .quick-total strong{font-size:24px;color:var(--gold2)}
 .qty-control{display:grid;grid-template-columns:43px 1fr 43px;gap:7px}
@@ -64,12 +64,18 @@ th{color:var(--gold2)}
 hr{border:0;border-top:1px solid var(--border);margin:16px 0}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 #toast{position:fixed;bottom:16px;left:12px;right:12px;max-width:500px;margin:auto;background:#222225;border:1px solid var(--gold);padding:14px;border-radius:12px;display:none;z-index:100;box-shadow:0 8px 40px #0009;font-size:14px}
-@media(min-width:600px){main{padding:24px}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.row{grid-template-columns:repeat(2,minmax(0,1fr))}.brand{font-size:24px}.panel{padding:19px}}
-@media(max-width:420px){header{padding:12px}.brand{font-size:16px}.brandmark{width:38px;height:38px}main{padding:10px}.item .actions button{padding:7px;font-size:11px}}
+details{margin-top:10px}summary{cursor:pointer}
+@media(min-width:600px){main{padding:24px}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.row{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:19px}}
+@media(max-width:420px){header{padding:10px}nav{top:66px;padding:7px}main{padding:10px}.item{align-items:flex-start}.item .actions button{padding:7px;font-size:11px}}
 </style>
 </head>
 <body>
-<header><div class="brandline"><div class="brandmark">♛</div><div><div class="brand">GESTÃO INHO DÚ CORTE</div><div class="subtitle">GESTÃO PREMIUM · ESTOQUE · VENDAS · CAIXA</div></div></div></header>
+<header>
+<div class="brandline">
+<div class="brandmark">♛</div>
+<div><div class="brand">GESTÃO INHO DÚ CORTE</div><div class="subtitle">GESTÃO PREMIUM · ESTOQUE · VENDAS · CAIXA</div></div>
+</div>
+</header>
 
 <nav id="navigation">
 <button data-page="assistente" class="primary">✦ Assistente</button>
@@ -84,7 +90,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 
 <main>
 <section id="assistente" class="page active">
-<div class="hero"><h2>Fala, parceiro!</h2><p>Registre vendas, consumos e valores de clientes. Para lançar uma dívida sem produto, use Contas.</p></div>
+<div class="hero"><h2>Fala, parceiro!</h2><p>Controle suas vendas, estoque, consumo dos clientes, contas e caixa em um só lugar.</p></div>
 <div class="grid">
 <div class="stat"><small>Vendas de hoje</small><strong id="quickTodaySales">R$ 0,00</strong></div>
 <div class="stat"><small>Dinheiro disponível</small><strong id="quickCash">R$ 0,00</strong></div>
@@ -108,10 +114,10 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <div class="actions"><button id="quickClear" type="button">Limpar campos</button></div>
 </div>
 <div class="panel">
-<h3>Assistente por texto</h3><p class="muted">Exemplo: João pegou duas águas.</p>
+<h3>Assistente por texto</h3><p class="muted">Exemplos: João pegou duas águas · Maria comprou 3 energéticos.</p>
 <label for="assistantText">Descreva o consumo</label><textarea id="assistantText" placeholder="Ex.: João pegou duas águas"></textarea>
 <div class="actions"><button class="primary" id="processText">Registrar consumo</button><button id="clearText">Limpar texto</button></div>
-<hr><h3>Lançamento de produto na conta</h3>
+<hr><h3>Lançamento manual na conta</h3>
 <label for="manualCustomer">Nome do cliente</label><input id="manualCustomer" placeholder="Nome do cliente">
 <label for="manualProduct">Produto</label><select id="manualProduct"></select>
 <label for="manualQty">Quantidade</label><input id="manualQty" type="number" min="1" step="1" value="1">
@@ -167,14 +173,14 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 </section>
 
 <section id="caixa" class="page">
-<h2>Caixa e saldo disponível</h2><p class="intro">Controle de saldo físico, entradas, retiradas e despesas.</p>
+<h2>Caixa e saldo disponível</h2><p class="intro">O dinheiro físico é calculado separadamente das entradas por Pix e cartão.</p>
 <div class="grid">
 <div class="stat"><small>Saldo disponível em dinheiro</small><strong id="cashBalance">R$ 0,00</strong></div>
 <div class="stat"><small>Recebimentos em dinheiro</small><strong id="cashPhysicalIn">R$ 0,00</strong></div>
 <div class="stat"><small>Entradas de vendas</small><strong id="cashIn">R$ 0,00</strong></div>
-<div class="stat"><small>Despesas</small><strong id="cashOut">R$ 0,00</strong></div>
+<div class="stat"><small>Despesas totais</small><strong id="cashOut">R$ 0,00</strong></div>
 </div>
-<div class="panel"><h3>Ajustar saldo disponível</h3><p class="muted">Informe o dinheiro que existe fisicamente agora. O sistema registra a diferença como ajuste.</p><label for="cashTarget">Saldo atual (R$)</label><input id="cashTarget" type="number" min="0" step=".01"><div class="actions"><button class="primary" id="setCashTarget">Salvar saldo</button></div></div>
+<div class="panel"><h3>Definir saldo físico atual</h3><p class="muted">Informe quanto dinheiro existe na gaveta agora. A diferença será registrada como ajuste.</p><label for="cashTarget">Saldo contado (R$)</label><input id="cashTarget" type="number" min="0" step=".01"><div class="actions"><button class="primary" id="setCashTarget">Salvar saldo</button></div></div>
 <div class="panel"><h3>Movimentação manual</h3><label for="cashMoveDesc">Descrição</label><input id="cashMoveDesc" placeholder="Ex.: Troco inicial, retirada pessoal"><div class="row"><div><label for="cashMoveType">Tipo</label><select id="cashMoveType"><option value="in">Entrada</option><option value="out">Retirada</option></select></div><div><label for="cashMoveAmount">Valor (R$)</label><input id="cashMoveAmount" type="number" min=".01" step=".01"></div></div><div class="actions"><button class="primary" id="saveCashMove">Registrar movimentação</button></div></div>
 <div class="panel"><h3>Registrar despesa</h3><label for="expenseDesc">Descrição</label><input id="expenseDesc" placeholder="Ex.: Compra de produtos"><div class="row"><div><label for="expenseAmount">Valor (R$)</label><input id="expenseAmount" type="number" min=".01" step=".01"></div><div><label for="expenseMethod">Forma de pagamento</label><select id="expenseMethod"><option>Dinheiro</option><option>Pix</option><option>Cartão</option><option>Outro</option></select></div></div><div class="actions"><button class="primary" id="saveExpense">Registrar despesa</button></div></div>
 <h3>Movimentações</h3><div id="cashMovementList"></div><h3>Despesas registradas</h3><div id="expenseList"></div>
@@ -183,10 +189,12 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <section id="relatorios" class="page">
 <h2>Relatórios</h2>
 <div class="panel"><div class="row"><div><label for="reportStart">Data inicial</label><input id="reportStart" type="date"></div><div><label for="reportEnd">Data final</label><input id="reportEnd" type="date"></div></div><div class="actions"><button class="primary" id="makeReport">Gerar relatório</button><button id="reportMonth">Mês atual</button></div></div>
-<div class="grid"><div class="stat"><small>Vendas pagas</small><strong id="reportSales">R$ 0,00</strong></div><div class="stat"><small>Despesas</small><strong id="reportExpenses">R$ 0,00</strong></div><div class="stat"><small>Resultado operacional</small><strong id="reportResult">R$ 0,00</strong></div></div>
+<div class="grid"><div class="stat"><small>Vendas pagas</small><strong id="reportSales">R$ 0,00</strong></div><div class="stat"><small>Despesas</small><strong id="reportExpenses">R$ 0,00</strong></div><div class="stat"><small>Lucro bruto estimado</small><strong id="reportGross">R$ 0,00</strong></div><div class="stat"><small>Resultado após despesas</small><strong id="reportResult">R$ 0,00</strong></div></div>
 <div class="panel"><h3>Vendas por forma de pagamento</h3><div id="paymentReport"></div></div>
 <div class="panel"><h3>Vendas por dia</h3><div id="dailyReport"></div></div>
 <div class="panel"><h3>Vendas por mês</h3><div id="monthlyReport"></div></div>
+<div class="panel"><h3>Produtos mais vendidos</h3><div id="productReport"></div></div>
+<p class="muted">O lucro é estimado com os custos cadastrados nos produtos. Vendas antigas sem custo salvo podem não refletir o custo real. O resultado não inclui impostos ou outras despesas não registradas.</p>
 </section>
 
 <section id="dados" class="page">
@@ -197,7 +205,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 </section>
 </main>
 <footer>GESTÃO INHO DÚ CORTE · CONTROLE PROFISSIONAL</footer>
-<div id="toast" role="status"></div>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 (function(){
@@ -216,29 +224,38 @@ const money=n=>(Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:
 const num=v=>{const n=Number(String(v??0).replace(",","."));return Number.isFinite(n)?n:0};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
-const dateISO=d=>{const x=d instanceof Date?d:new Date(d||Date.now());return Number.isNaN(x.getTime())?new Date().toISOString():x.toISOString()};
-const dateKey=v=>dateISO(v).slice(0,10);
-const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const arr=v=>Array.isArray(v)?v:[];
 const first=(o,keys,def)=>{for(const k of keys)if(o&&o[k]!==undefined&&o[k]!==null)return o[k];return def};
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const norm=s=>String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
 
-function read(k,d){
- try{const x=localStorage.getItem(k);return x===null?d:JSON.parse(x)??d}catch(e){return d}
+function localDateKey(v){
+ if(!v)return today();
+ if(typeof v==="string"&&/^\d{4}-\d{2}-\d{2}$/.test(v))return v;
+ const d=v instanceof Date?v:new Date(v);
+ if(Number.isNaN(d.getTime()))return today();
+ return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
 }
-function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
-function toast(s){
- const e=$("toast");e.textContent=s;e.style.display="block";
- clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.style.display="none",3200);
+function dateISO(v){
+ const d=v instanceof Date?v:new Date(v||Date.now());
+ return Number.isNaN(d.getTime())?new Date().toISOString():d.toISOString();
 }
-function norm(s){return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim()}
 function download(filename,content,type){
  const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");
  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
+function read(k,d){
+ try{const x=localStorage.getItem(k);return x===null?d:JSON.parse(x)??d}catch(e){return d}
+}
+function toast(s){
+ const e=$("toast");e.textContent=s;e.style.display="block";
+ clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.style.display="none",3500);
+}
 function normalizeProduct(p){
  if(typeof p==="string")p={name:p};
- return {...p,id:String(first(p,["id","productId"],uid())),name:String(first(p,["name","nome","productName","produto"],"Produto")),price:num(first(p,["price","preco","salePrice","valor"],0)),cost:num(first(p,["cost","custo","purchasePrice"],0)),stock:Math.max(0,num(first(p,["stock","quantity","qty","estoque","quantidade"],0))),min:Math.max(0,num(first(p,["min","minimum","minStock"],2))),photo:String(first(p,["photo","image","imageUrl"],""))};
+ p=p&&typeof p==="object"?p:{};
+ return {...p,id:String(first(p,["id","productId"],uid())),name:String(first(p,["name","nome","productName","produto"],"Produto")),price:Math.max(0,num(first(p,["price","preco","salePrice","valor"],0))),cost:Math.max(0,num(first(p,["cost","custo","purchasePrice"],0))),stock:Math.max(0,Math.floor(num(first(p,["stock","quantity","qty","estoque","quantidade"],0)))),min:Math.max(0,Math.floor(num(first(p,["min","minimum","minStock"],2)))),photo:String(first(p,["photo","image","imageUrl"],""))};
 }
 function normalizeItem(i){
  i=i&&typeof i==="object"?i:{};
@@ -248,8 +265,7 @@ function normalizeItem(i){
 }
 function normalizeAccount(a){
  a=a&&typeof a==="object"?a:{};
- const items=arr(a.items||a.itens).map(normalizeItem);
- return {...a,id:String(first(a,["id"],uid())),customer:String(first(a,["customer","name","cliente"],"Cliente")),status:String(first(a,["status"],"open"))==="paid"?"paid":"open",createdAt:dateISO(first(a,["createdAt","date"],Date.now())),updatedAt:dateISO(first(a,["updatedAt"],Date.now())),items,paidAmount:num(first(a,["paidAmount"],0)),payment:String(first(a,["payment"],"")),payments:arr(a.payments)};
+ return {...a,id:String(first(a,["id"],uid())),customer:String(first(a,["customer","name","cliente"],"Cliente")),status:String(first(a,["status"],"open"))==="paid"?"paid":"open",createdAt:dateISO(first(a,["createdAt","date"],Date.now())),updatedAt:dateISO(first(a,["updatedAt"],Date.now())),items:arr(a.items||a.itens).map(normalizeItem),paidAmount:Math.max(0,num(first(a,["paidAmount"],0))),payment:String(first(a,["payment"],"")),payments:arr(a.payments)};
 }
 
 let products=arr(read(KEYS.stock,[])).map(normalizeProduct);
@@ -264,31 +280,40 @@ let currentPhoto="",selectedPayment="Dinheiro";
 
 function persist(){
  try{
-  save(KEYS.stock,products);save(KEYS.sales,sales);save(KEYS.history,history);
-  save(KEYS.expenses,expenses);save(KEYS.accounts,accounts);save(KEYS.config,config);
+  localStorage.setItem(KEYS.stock,JSON.stringify(products));
+  localStorage.setItem(KEYS.sales,JSON.stringify(sales));
+  localStorage.setItem(KEYS.history,JSON.stringify(history));
+  localStorage.setItem(KEYS.expenses,JSON.stringify(expenses));
+  localStorage.setItem(KEYS.accounts,JSON.stringify(accounts));
+  localStorage.setItem(KEYS.config,JSON.stringify(config));
   return true;
- }catch(e){toast("Não foi possível salvar. O armazenamento pode estar cheio; faça backup e reduza as fotos.");return false}
+ }catch(e){
+  toast("Não foi possível salvar. O armazenamento pode estar cheio. Faça backup e reduza as fotos.");
+  return false;
+ }
 }
 function logEvent(type,details){
  history.push({id:uid(),type,details:String(details),date:new Date().toISOString()});
  if(history.length>5000)history=history.slice(-5000);
- save(KEYS.history,history);
+ try{localStorage.setItem(KEYS.history,JSON.stringify(history))}catch(e){toast("Aviso: histórico não pôde ser salvo. Faça backup.")}
 }
 function navigate(id){
+ const page=$(id);
+ if(!page||!page.classList.contains("page"))return;
  document.querySelectorAll(".page").forEach(s=>s.classList.toggle("active",s.id===id));
  document.querySelectorAll("[data-page]").forEach(b=>b.classList.toggle("primary",b.dataset.page===id));
- renderAll();window.scrollTo({top:0,behavior:"smooth"});
+ renderAll();
+ window.scrollTo({top:0,behavior:"auto"});
 }
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.go)));
 
 function accountOriginalTotal(a){return arr(a.items).reduce((s,i)=>s+num(i.total),0)}
-/* O saldo pendente desconta tudo que já foi recebido. */
 function accountTotal(a){return Math.max(0,accountOriginalTotal(a)-num(a.paidAmount))}
-function openAccounts(){return accounts.filter(a=>a.status!=="paid")}
+function openAccounts(){return accounts.filter(a=>a.status!=="paid"&&accountTotal(a)>.005)}
 function findProduct(text){
- const q=norm(text);
- return !q?null:products.find(p=>norm(p.name)===q)||products.find(p=>norm(p.name).includes(q)||q.includes(norm(p.name)))||null;
+ const q=norm(text);if(!q)return null;
+ return products.find(p=>norm(p.name)===q)||products.find(p=>norm(p.name).includes(q))||null;
 }
 function getAccount(name){return openAccounts().find(a=>norm(a.customer)===norm(name))||null}
 function openOrGetAccount(customer){
@@ -311,7 +336,8 @@ function addToAccount(customer,productId,qty){
  p.stock-=qty;
  a.items.push(normalizeItem({id:uid(),productId:p.id,productName:p.name,qty,unitPrice:p.price,unitCost:p.cost,total:qty*p.price}));
  a.updatedAt=new Date().toISOString();
- persist();logEvent("consumo",customer+" consumiu "+qty+" x "+p.name);
+ if(!persist())throw Error("Não foi possível salvar. Confira o espaço disponível.");
+ logEvent("consumo",customer+" consumiu "+qty+" x "+p.name);
  renderAll();toast(qty+" x "+p.name+" adicionado à conta.");
 }
 function addManualDebt(customer,description,amount,date){
@@ -323,25 +349,26 @@ function addManualDebt(customer,description,amount,date){
  const stamp=date?new Date(date+"T12:00:00").toISOString():new Date().toISOString();
  a.items.push(normalizeItem({id:uid(),productId:"",productName:description,description,qty:1,unitPrice:amount,total:amount,unitCost:0,manual:true,date:stamp}));
  a.updatedAt=new Date().toISOString();
- persist();logEvent("divida_avulsa",customer+" — "+description+" — "+money(amount));
+ if(!persist())throw Error("Não foi possível salvar a dívida.");
+ logEvent("divida_avulsa",customer+" — "+description+" — "+money(amount));
  renderAll();toast("Valor adicionado à conta de "+customer+".");
 }
 function removeAccountItem(accountId,itemId){
  const a=accounts.find(x=>x.id===accountId);
  if(!a||a.status==="paid")return;
- const idx=a.items.findIndex(i=>i.id===itemId);
- if(idx<0)return;
+ const idx=a.items.findIndex(i=>i.id===itemId);if(idx<0)return;
+ if(!confirm("Remover este lançamento da conta? Se for um produto, a quantidade voltará ao estoque."))return;
  const item=a.items[idx],p=products.find(x=>x.id===item.productId);
  if(p&&item.productId)p.stock+=item.qty;
  a.items.splice(idx,1);a.updatedAt=new Date().toISOString();
- if(accountTotal(a)<=0.005)a.status="paid";
+ if(accountTotal(a)<=.005)a.status="paid";
  persist();logEvent("consumo_cancelado","Item removido da conta de "+a.customer);
- renderAll();toast("Item removido da conta.");
+ renderAll();toast("Lançamento removido.");
 }
 function deleteOpenAccount(id){
  const a=accounts.find(x=>x.id===id);
  if(!a||a.status==="paid")return;
- if(!confirm("Cancelar a conta de "+a.customer+"? Produtos consumidos serão devolvidos ao estoque."))return;
+ if(!confirm("Cancelar a conta de "+a.customer+"? Os produtos serão devolvidos ao estoque."))return;
  a.items.forEach(i=>{const p=products.find(x=>x.id===i.productId);if(p&&i.productId)p.stock+=i.qty});
  accounts=accounts.filter(x=>x.id!==id);
  persist();logEvent("conta_cancelada","Conta cancelada: "+a.customer);
@@ -351,7 +378,7 @@ function payAccount(id){
  const a=accounts.find(x=>x.id===id);
  if(!a||a.status==="paid")return;
  const total=accountTotal(a);
- if(total<=0.005){toast("Essa conta não tem valor pendente.");return}
+ if(total<=.005){toast("Essa conta não tem valor pendente.");return}
  const method=prompt("Total pendente: "+money(total)+"\nDigite Dinheiro, Pix, Cartão ou Outro","Pix");
  if(method===null)return;
  const n=norm(method);
@@ -360,17 +387,16 @@ function payAccount(id){
  const raw=prompt("Valor recebido agora (máximo "+money(total)+"):",total.toFixed(2));
  if(raw===null)return;
  const amount=num(raw);
- if(amount<=0||amount>total+0.001){toast("Informe um valor válido, até o total da dívida.");return}
+ if(amount<=0||amount>total+.001){toast("Informe um valor válido, até o total da dívida.");return}
  if(!confirm("Confirmar recebimento de "+money(amount)+" de "+a.customer+" por "+payment+"?"))return;
  const now=new Date().toISOString();
- a.paidAmount=num(a.paidAmount)+amount;
- a.updatedAt=now;a.payment=payment;
+ a.paidAmount=num(a.paidAmount)+amount;a.updatedAt=now;a.payment=payment;
  a.payments=arr(a.payments);a.payments.push({id:uid(),amount,payment,date:now});
- if(accountTotal(a)<=0.005){a.status="paid";a.paidAt=now}
+ if(accountTotal(a)<=.005){a.status="paid";a.paidAt=now}
  sales.push({id:uid(),accountId:a.id,customer:a.customer,items:[],total:amount,amount,payment,date:now,createdAt:now,type:"account_payment",status:"paid"});
- persist();logEvent("pagamento","Recebido "+money(amount)+" de "+a.customer+" via "+payment);
- renderAll();
- toast(a.status==="paid"?"Dívida quitada!":"Pagamento parcial registrado. Saldo restante: "+money(accountTotal(a)));
+ if(!persist()){sales.pop();a.paidAmount-=amount;a.payments.pop();a.status="open";return}
+ logEvent("pagamento","Recebido "+money(amount)+" de "+a.customer+" via "+payment);
+ renderAll();toast(a.status==="paid"?"Dívida quitada!":"Pagamento parcial registrado. Saldo: "+money(accountTotal(a)));
 }
 function renderAccounts(){
  const filter=norm($("accountFilter").value),status=$("accountStatus").value;
@@ -379,8 +405,8 @@ function renderAccounts(){
   const total=a.status==="paid"?0:accountTotal(a);
   return `<div class="panel"><div class="item"><div><strong>${esc(a.customer)}</strong><div class="muted">Criada em ${new Date(a.createdAt).toLocaleDateString("pt-BR")}</div><span class="pill ${a.status==="paid"?"green":"gold"}">${a.status==="paid"?"PAGA":"EM ABERTO"}</span></div><div class="right"><strong class="gold">${money(total)}</strong><p>Recebido: ${money(a.paidAmount)}</p></div></div>
   ${a.items.map(i=>`<div class="item"><div>${esc(i.productName)}${i.manual?'<span class="pill">VALOR AVULSO</span>':""}<p>${i.qty} × ${money(i.unitPrice)}</p></div><div class="right">${money(i.total)}${a.status!=="paid"?`<div><button class="danger" data-remove-item="${esc(a.id)}|${esc(i.id)}">Remover</button></div>`:""}</div></div>`).join("")}
-  ${a.payments&&a.payments.length?`<details><summary class="muted">Histórico de pagamentos (${a.payments.length})</summary>${a.payments.map(p=>`<p class="muted">${new Date(p.date).toLocaleString("pt-BR")} · ${esc(p.payment)} · ${money(p.amount)}</p>`).join("")}</details>`:""}
-  ${a.status!=="paid"?`<div class="actions"><button class="primary" data-pay="${esc(a.id)}">Receber pagamento</button><button data-add-more="${esc(a.id)}">Adicionar produto</button><button class="danger" data-cancel-account="${esc(a.id)}">Cancelar conta</button></div>`:`<p class="muted">Conta quitada · Último pagamento: ${esc(a.payment||"Consulte histórico")}</p>`}
+  ${a.payments.length?`<details><summary class="muted">Histórico de pagamentos (${a.payments.length})</summary>${a.payments.map(p=>`<p class="muted">${new Date(p.date).toLocaleString("pt-BR")} · ${esc(p.payment)} · ${money(p.amount)}</p>`).join("")}</details>`:""}
+  ${a.status!=="paid"?`<div class="actions"><button class="primary" data-pay="${esc(a.id)}">Receber pagamento</button><button data-add-more="${esc(a.id)}">Adicionar produto</button><button class="danger" data-cancel-account="${esc(a.id)}">Cancelar conta</button></div>`:`<p class="muted">Conta quitada · ${esc(a.payment||"Consulte histórico")}</p>`}
   </div>`;
  }).join(""):'<div class="empty">Nenhuma conta encontrada.</div>';
  $("homeAccounts").innerHTML=openAccounts().slice(0,5).map(a=>`<div class="item"><div>${esc(a.customer)}<p>${a.items.length} lançamento(s)</p></div><strong class="gold">${money(accountTotal(a))}</strong></div>`).join("")||'<div class="empty">Nenhuma conta pendente.</div>';
@@ -435,32 +461,34 @@ $("quickClear").addEventListener("click",()=>{
  updateQuickTotal();
 });
 $("quickSell").addEventListener("click",()=>{
+ const p=selectedQuickProduct(),q=num($("quickQty").value),customer=$("quickCustomer").value.trim(),mode=$("quickMode").value;
  try{
-  const p=selectedQuickProduct(),q=Math.floor(num($("quickQty").value)),customer=$("quickCustomer").value.trim(),mode=$("quickMode").value;
   if(!p)throw Error("Selecione um produto.");
-  if(q<1||!Number.isInteger(q)||p.stock<q)throw Error("Quantidade inválida ou estoque insuficiente.");
-  if(mode==="account"&&!customer)throw Error("Informe o cliente para anotar na conta.");
+  if(!Number.isInteger(q)||q<1||p.stock<q)throw Error("Quantidade inválida ou estoque insuficiente.");
+  if(mode==="account"){if(!customer)throw Error("Informe o cliente.");if(confirm("Adicionar "+q+" x "+p.name+" ("+money(p.price*q)+") à conta de "+customer+"?"))addToAccount(customer,p.id,q);return}
   if(!confirm("Confirmar "+q+" x "+p.name+" — "+money(p.price*q)+"?"))return;
-  if(mode==="account")addToAccount(customer,p.id,q);
-  else{
-   p.stock-=q;const total=p.price*q,now=new Date().toISOString();
-   const item=normalizeItem({id:uid(),productId:p.id,productName:p.name,qty:q,unitPrice:p.price,unitCost:p.cost,total});
-   sales.push({id:uid(),customer:customer||"Venda balcão",items:[item],total,amount:total,payment:selectedPayment,date:now,createdAt:now,type:"quick",status:"paid"});
-   persist();logEvent("venda_rapida",q+" x "+p.name+" — "+money(total)+" — "+selectedPayment);
-   renderAll();toast("Venda registrada e estoque atualizado.");
-  }
-  $("quickCustomer").value="";$("quickQty").value="1";updateQuickTotal();
+  const oldStock=p.stock,now=new Date().toISOString(),total=p.price*q;
+  p.stock-=q;
+  sales.push({id:uid(),customer:customer||"Venda balcão",items:[normalizeItem({id:uid(),productId:p.id,productName:p.name,qty:q,unitPrice:p.price,unitCost:p.cost,total})],total,amount:total,payment:selectedPayment,date:now,createdAt:now,type:"quick",status:"paid"});
+  if(!persist()){p.stock=oldStock;sales.pop();return}
+  logEvent("venda_rapida",q+" x "+p.name+" — "+money(total)+" — "+selectedPayment);
+  $("quickCustomer").value="";$("quickQty").value="1";renderAll();toast("Venda registrada e estoque atualizado.");
  }catch(e){toast(e.message)}
 });
 $("processText").addEventListener("click",()=>{
- const t=$("assistantText").value.trim();if(!t){toast("Digite o consumo.");return}
- const p=products.slice().sort((a,b)=>b.name.length-a.name.length).find(x=>norm(t).includes(norm(x.name)));
- if(!p){toast("Não encontrei o produto. Use a venda rápida ou a conta manual.");return}
+ const t=$("assistantText").value.trim();
+ if(!t){toast("Digite o consumo.");return}
+ const nt=norm(t);
+ const sorted=products.slice().sort((a,b)=>norm(b.name).length-norm(a.name).length);
+ const p=sorted.find(x=>nt.includes(norm(x.name)));
+ if(!p){toast("Não encontrei o produto. Confira o cadastro ou use a venda rápida.");return}
  const words={"um":1,"uma":1,"dois":2,"duas":2,"tres":3,"quatro":4,"cinco":5,"seis":6,"sete":7,"oito":8,"nove":9,"dez":10};
- const q=norm(t),m=q.match(/\b(\d+)\b/);let qty=m?parseInt(m[1],10):1;
- if(!m)for(const [w,v] of Object.entries(words))if(new RegExp("\\b"+w+"\\b").test(q)){qty=v;break}
- let customer=t.slice(0,norm(t).indexOf(norm(p.name))).trim().replace(/^(o cliente|a cliente|cliente|por favor)\s*/i,"").replace(/\b(pegou|comprou|consumiu|levou|tomou|bebeu|quer|quero|uma|um|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez|\d+)\b/gi," ").replace(/\s+/g," ").trim()||$("manualCustomer").value.trim();
- if(!customer){toast("Informe o nome do cliente.");return}
+ const matches=nt.match(/\b(\d+)\b/);let qty=matches?parseInt(matches[1],10):1;
+ if(!matches){for(const [w,v] of Object.entries(words)){if(new RegExp("\\b"+w+"\\b").test(nt)){qty=v;break}}}
+ let before=nt.split(norm(p.name))[0];
+ before=before.replace(/\b(pegou|comprou|consumiu|levou|tomou|bebeu|quer|quero|uma|um|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez|cliente|por favor|\d+)\b/g," ").replace(/\s+/g," ").trim();
+ const customer=before||$("manualCustomer").value.trim();
+ if(!customer){toast("Não identifiquei o cliente. Informe o nome no campo de lançamento manual.");return}
  try{addToAccount(customer,p.id,qty);$("assistantText").value=""}catch(e){toast(e.message)}
 });
 $("clearText").addEventListener("click",()=>$("assistantText").value="");
@@ -473,14 +501,15 @@ function resetProductForm(){
 $("productPhoto").addEventListener("change",()=>{
  const f=$("productPhoto").files[0];if(!f)return;
  if(!f.type.startsWith("image/")){toast("Selecione uma imagem válida.");$("productPhoto").value="";return}
- /* Redimensiona fotos para reduzir o uso do armazenamento do navegador. */
+ if(f.size>12*1024*1024){toast("A foto deve ter menos de 12 MB.");$("productPhoto").value="";return}
  const img=new Image(),url=URL.createObjectURL(f);
  img.onload=()=>{
   try{
    const canvas=document.createElement("canvas"),max=500,scale=Math.min(1,max/Math.max(img.width,img.height));
-   canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
-   canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
-   currentPhoto=canvas.toDataURL("image/jpeg",.78);
+   canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
+   const ctx=canvas.getContext("2d");if(!ctx)throw Error("Canvas indisponível");
+   ctx.drawImage(img,0,0,canvas.width,canvas.height);
+   currentPhoto=canvas.toDataURL("image/jpeg",.75);
    $("photoPreview").innerHTML=`<img class="product-photo" alt="Prévia" src="${currentPhoto}">`;
   }catch(e){toast("Não foi possível processar a foto.")}
   URL.revokeObjectURL(url);
@@ -489,27 +518,30 @@ $("productPhoto").addEventListener("change",()=>{
  img.src=url;
 });
 $("saveProduct").addEventListener("click",()=>{
- const name=$("productName").value.trim();
+ const name=$("productName").value.trim(),price=num($("productPrice").value),cost=num($("productCost").value),stock=num($("productStock").value),min=num($("productMin").value),id=$("productId").value;
  if(!name){toast("Informe o nome do produto.");return}
- const price=num($("productPrice").value),cost=num($("productCost").value),stock=num($("productStock").value),min=num($("productMin").value);
  if(price<0||cost<0||stock<0||min<0||!Number.isInteger(stock)||!Number.isInteger(min)){toast("Confira os valores e quantidades.");return}
- const id=$("productId").value;
+ if(products.some(p=>norm(p.name)===norm(name)&&p.id!==id)){toast("Já existe um produto com esse nome.");return}
+ let old;
  if(id){
-  const p=products.find(x=>x.id===id);if(!p)return;
-  p.name=name;p.price=price;p.cost=cost;p.stock=stock;p.min=min;
-  if(currentPhoto)p.photo=currentPhoto;
+  old=products.find(x=>x.id===id);if(!old){toast("Produto não encontrado.");return}
+  const previous={...old};Object.assign(old,{name,price,cost,stock,min});
+  if(currentPhoto)old.photo=currentPhoto;
+  if(!persist()){Object.assign(old,previous);return}
   logEvent("produto_editado",name);
  }else{
-  products.push({id:uid(),name,price,cost,stock,min,photo:currentPhoto});
+  const p={id:uid(),name,price,cost,stock,min,photo:currentPhoto};
+  products.push(p);
+  if(!persist()){products.pop();return}
   logEvent("produto_cadastrado",name);
  }
- if(persist()){resetProductForm();renderAll();toast("Produto salvo.")}
+ resetProductForm();renderAll();toast("Produto salvo.");
 });
 $("cancelEdit").addEventListener("click",resetProductForm);
 function editProduct(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  $("productId").value=p.id;$("productName").value=p.name;$("productPrice").value=p.price;$("productCost").value=p.cost;$("productStock").value=p.stock;$("productMin").value=p.min;
- currentPhoto=p.photo||"";
+ currentPhoto=p.photo||"";$("productPhoto").value="";
  $("photoPreview").innerHTML=currentPhoto?`<img class="product-photo" alt="Foto" src="${esc(currentPhoto)}">`:"";
  $("productFormTitle").textContent="Editar produto";$("cancelEdit").hidden=false;
  window.scrollTo({top:0,behavior:"smooth"});
@@ -518,7 +550,9 @@ function deleteProduct(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  if(accounts.some(a=>a.status!=="paid"&&a.items.some(i=>i.productId===id))){toast("Produto presente em conta aberta. Remova o consumo primeiro.");return}
  if(!confirm("Excluir "+p.name+"?"))return;
- products=products.filter(x=>x.id!==id);persist();renderAll();toast("Produto excluído.");
+ const old=products;products=products.filter(x=>x.id!==id);
+ if(!persist()){products=old;return}
+ logEvent("produto_excluido",p.name);renderAll();toast("Produto excluído.");
 }
 function adjustStock(id){
  const p=products.find(x=>x.id===id);if(!p)return;
@@ -526,7 +560,9 @@ function adjustStock(id){
  if(raw===null)return;
  const n=Number(raw);
  if(!Number.isInteger(n)||n<1){toast("Digite um número inteiro maior que zero.");return}
- p.stock+=n;persist();logEvent("estoque_adicionado",n+" unidades de "+p.name);
+ p.stock+=n;
+ if(!persist()){p.stock-=n;return}
+ logEvent("estoque_adicionado",n+" unidades de "+p.name);
  renderAll();toast("Estoque atualizado.");
 }
 function renderProducts(){
@@ -543,10 +579,10 @@ $("productList").addEventListener("click",e=>{
 $("stockSearch").addEventListener("input",renderProducts);
 
 function paidSales(){return sales.filter(s=>s.status!=="cancelled"&&s.cancelled!==true)}
-function saleDate(s){return dateKey(first(s,["date","createdAt","paidAt"],Date.now()))}
+function saleDate(s){return localDateKey(first(s,["date","createdAt","paidAt"],Date.now()))}
 function saleAmount(s){return num(first(s,["total","amount","value"],0))}
 function salePayment(s){return String(first(s,["payment","method","formaPagamento"],"Outro"))}
-function expenseDate(e){return dateKey(first(e,["date","createdAt"],Date.now()))}
+function expenseDate(e){return localDateKey(first(e,["date","createdAt"],Date.now()))}
 function expenseAmount(e){return num(first(e,["amount","value","valor"],0))}
 function inRange(d,a,b){return d>=a&&d<=b}
 function todaySales(){return paidSales().filter(s=>saleDate(s)===today()).reduce((t,s)=>t+saleAmount(s),0)}
@@ -561,13 +597,13 @@ function renderSales(){
  const a=$("salesStart").value||today(),b=$("salesEnd").value||today();
  const list=paidSales().filter(s=>inRange(saleDate(s),a,b)).sort((x,y)=>new Date(y.date||y.createdAt)-new Date(x.date||x.createdAt));
  $("salesTotal").textContent=money(list.reduce((s,x)=>s+saleAmount(x),0));$("salesCount").textContent=list.length;
- $("salesList").innerHTML=list.length?list.map(s=>`<div class="item"><div><strong>${esc(s.customer||"Venda balcão")}</strong><p>${new Date(s.date||s.createdAt).toLocaleString("pt-BR")} · ${esc(salePayment(s))}</p></div><div class="right"><strong class="gold">${money(saleAmount(s))}</strong></div></div>`).join(""):'<div class="empty">Nenhuma venda nesse período.</div>';
+ $("salesList").innerHTML=list.length?list.map(s=>`<div class="item"><div><strong>${esc(s.customer||"Venda balcão")}</strong><p>${new Date(s.date||s.createdAt).toLocaleString("pt-BR")} · ${esc(salePayment(s))}${s.type==="account_payment"?" · Pagamento de dívida":""}</p></div><div class="right"><strong class="gold">${money(saleAmount(s))}</strong></div></div>`).join(""):'<div class="empty">Nenhuma venda nesse período.</div>';
 }
 $("filterSales").addEventListener("click",renderSales);
 $("resetSalesFilter").addEventListener("click",()=>{$("salesStart").value=today();$("salesEnd").value=today();renderSales()});
 $("exportSales").addEventListener("click",()=>{
- const a=$("salesStart").value||today(),b=$("salesEnd").value||today(),rows=[["Data","Cliente","Forma de pagamento","Valor"]];
- paidSales().filter(s=>inRange(saleDate(s),a,b)).forEach(s=>rows.push([saleDate(s),s.customer||"Venda balcão",salePayment(s),saleAmount(s).toFixed(2)]));
+ const a=$("salesStart").value||today(),b=$("salesEnd").value||today(),rows=[["Data","Cliente","Forma de pagamento","Valor","Tipo"]];
+ paidSales().filter(s=>inRange(saleDate(s),a,b)).forEach(s=>rows.push([saleDate(s),s.customer||"Venda balcão",salePayment(s),saleAmount(s).toFixed(2),s.type||"venda"]));
  download("vendas-inho-du-corte.csv","\uFEFF"+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n"),"text/csv;charset=utf-8");
 });
 
@@ -585,35 +621,44 @@ $("setCashTarget").addEventListener("click",()=>{
  if(raw.trim()===""||target<0){toast("Informe um saldo válido.");return}
  const delta=target-cashBalance();
  if(Math.abs(delta)<.005){toast("O saldo já corresponde ao valor informado.");return}
- config.cashMovements.push({id:uid(),type:delta>=0?"in":"out",amount:Math.abs(delta),description:"Ajuste manual do saldo",date:new Date().toISOString(),adjustment:true});
- persist();logEvent("ajuste_caixa","Saldo ajustado para "+money(target));
+ const move={id:uid(),type:delta>=0?"in":"out",amount:Math.abs(delta),description:"Ajuste manual do saldo",date:new Date().toISOString(),adjustment:true};
+ config.cashMovements.push(move);
+ if(!persist()){config.cashMovements.pop();return}
+ logEvent("ajuste_caixa","Saldo ajustado para "+money(target));
  $("cashTarget").value="";renderAll();toast("Saldo ajustado.");
 });
 $("saveCashMove").addEventListener("click",()=>{
  const d=$("cashMoveDesc").value.trim(),a=num($("cashMoveAmount").value),t=$("cashMoveType").value;
  if(!d||a<=0){toast("Informe descrição e valor válido.");return}
- config.cashMovements.push({id:uid(),description:d,amount:a,type:t,date:new Date().toISOString()});
- persist();logEvent("movimentacao_caixa",d+" — "+money(a));
+ const move={id:uid(),description:d,amount:a,type:t,date:new Date().toISOString()};
+ config.cashMovements.push(move);
+ if(!persist()){config.cashMovements.pop();return}
+ logEvent("movimentacao_caixa",d+" — "+money(a));
  $("cashMoveDesc").value="";$("cashMoveAmount").value="";renderAll();toast("Movimentação registrada.");
 });
 $("cashMovementList").addEventListener("click",e=>{
  const b=e.target.closest("[data-delete-move]");if(!b)return;
  if(!confirm("Excluir movimentação?"))return;
- config.cashMovements=config.cashMovements.filter(m=>String(m.id)!==b.dataset.deleteMove);
- persist();renderAll();toast("Movimentação excluída.");
+ const old=config.cashMovements;
+ config.cashMovements=old.filter(m=>String(m.id)!==b.dataset.deleteMove);
+ if(!persist()){config.cashMovements=old;return}
+ logEvent("movimentacao_excluida","Movimentação removida");renderAll();toast("Movimentação excluída.");
 });
 $("saveExpense").addEventListener("click",()=>{
  const d=$("expenseDesc").value.trim(),a=num($("expenseAmount").value);
  if(!d||a<=0){toast("Informe descrição e valor válido.");return}
- expenses.push({id:uid(),description:d,amount:a,payment:$("expenseMethod").value,date:new Date().toISOString()});
- persist();logEvent("despesa",d+" — "+money(a));
+ const e={id:uid(),description:d,amount:a,payment:$("expenseMethod").value,date:new Date().toISOString()};
+ expenses.push(e);
+ if(!persist()){expenses.pop();return}
+ logEvent("despesa",d+" — "+money(a));
  $("expenseDesc").value="";$("expenseAmount").value="";renderAll();toast("Despesa registrada.");
 });
 $("expenseList").addEventListener("click",e=>{
  const b=e.target.closest("[data-delete-expense]");if(!b)return;
  if(!confirm("Excluir despesa?"))return;
- expenses=expenses.filter(x=>String(x.id)!==b.dataset.deleteExpense);
- persist();renderAll();toast("Despesa excluída.");
+ const old=expenses;expenses=old.filter(x=>String(x.id)!==b.dataset.deleteExpense);
+ if(!persist()){expenses=old;return}
+ logEvent("despesa_excluida","Despesa removida");renderAll();toast("Despesa excluída.");
 });
 
 function groupTotals(items,keyFn,valueFn){
@@ -624,21 +669,38 @@ function reportTable(rows,label){
  if(!rows.length)return '<div class="empty">Sem registros no período.</div>';
  return '<div class="tablewrap"><table><thead><tr><th>'+label+'</th><th>Total</th></tr></thead><tbody>'+rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${money(v)}</td></tr>`).join("")+'</tbody></table></div>';
 }
+function saleCost(s){
+ return arr(s.items).reduce((sum,i)=>sum+num(i.unitCost)*num(i.qty),0);
+}
 function renderReport(){
  const a=$("reportStart").value||today(),b=$("reportEnd").value||today();
  const ss=paidSales().filter(s=>inRange(saleDate(s),a,b)),ee=expenses.filter(e=>inRange(expenseDate(e),a,b));
  const t=ss.reduce((s,x)=>s+saleAmount(x),0),o=ee.reduce((s,x)=>s+expenseAmount(x),0);
- $("reportSales").textContent=money(t);$("reportExpenses").textContent=money(o);$("reportResult").textContent=money(t-o);
+ const costs=ss.reduce((s,x)=>s+saleCost(x),0);
+ $("reportSales").textContent=money(t);$("reportExpenses").textContent=money(o);
+ $("reportGross").textContent=money(t-costs);$("reportResult").textContent=money(t-costs-o);
  $("paymentReport").innerHTML=reportTable(groupTotals(ss,salePayment,saleAmount),"Forma de pagamento");
  $("dailyReport").innerHTML=reportTable(groupTotals(ss,saleDate,saleAmount),"Dia");
  $("monthlyReport").innerHTML=reportTable(groupTotals(ss,s=>saleDate(s).slice(0,7),saleAmount),"Mês");
+ const productTotals={};
+ ss.forEach(s=>arr(s.items).forEach(i=>{
+  const name=i.productName||"Produto";
+  productTotals[name]=(productTotals[name]||0)+num(i.qty);
+ }));
+ $("productReport").innerHTML=Object.keys(productTotals).length
+ ?'<div class="tablewrap"><table><thead><tr><th>Produto</th><th>Quantidade</th></tr></thead><tbody>'+Object.entries(productTotals).sort((a,b)=>b[1]-a[1]).map(([n,q])=>`<tr><td>${esc(n)}</td><td>${q}</td></tr>`).join("")+'</tbody></table></div>'
+ :'<div class="empty">Sem produtos vendidos no período.</div>';
 }
 $("makeReport").addEventListener("click",renderReport);
 $("reportMonth").addEventListener("click",()=>{
- const d=new Date();$("reportStart").value=dateKey(new Date(d.getFullYear(),d.getMonth(),1));$("reportEnd").value=today();renderReport();
+ const d=new Date();
+ $("reportStart").value=localDateKey(new Date(d.getFullYear(),d.getMonth(),1));
+ $("reportEnd").value=today();renderReport();
 });
 function renderHome(){
- $("homeSales").textContent=money(todaySales());$("homeOpen").textContent=openAccounts().length;$("homeProducts").textContent=products.length;
+ $("homeSales").textContent=money(todaySales());
+ $("homeOpen").textContent=openAccounts().length;
+ $("homeProducts").textContent=products.length;
  $("lowStock").innerHTML=products.filter(p=>p.stock<=p.min).map(p=>`<div class="item"><div>${esc(p.name)}<p>Mínimo: ${p.min}</p></div><strong class="red">${p.stock}</strong></div>`).join("")||'<div class="empty">Estoque acima do mínimo.</div>';
 }
 function renderAll(){
@@ -646,11 +708,12 @@ function renderAll(){
  $("dataStatus").textContent="Produtos: "+products.length+" · Vendas: "+sales.length+" · Despesas: "+expenses.length+" · Contas: "+accounts.length+" · Atualizado: "+new Date().toLocaleString("pt-BR");
 }
 $("backupBtn").addEventListener("click",()=>{
- const d={version:5,createdAt:new Date().toISOString(),[KEYS.stock]:products,[KEYS.history]:history,[KEYS.sales]:sales,[KEYS.expenses]:expenses,[KEYS.config]:config,[KEYS.accounts]:accounts};
+ const d={version:6,createdAt:new Date().toISOString(),[KEYS.stock]:products,[KEYS.history]:history,[KEYS.sales]:sales,[KEYS.expenses]:expenses,[KEYS.config]:config,[KEYS.accounts]:accounts};
  download("backup-gestao-inho-du-corte-"+today()+".json",JSON.stringify(d,null,2),"application/json");
 });
 $("restoreBtn").addEventListener("click",()=>{
  const f=$("restoreFile").files[0];if(!f){toast("Selecione um backup.");return}
+ if(f.size>25*1024*1024){toast("Arquivo muito grande. Selecione um backup menor que 25 MB.");return}
  if(!confirm("Restaurar backup? Faça backup atual antes. Os dados correspondentes serão substituídos."))return;
  const r=new FileReader();
  r.onload=()=>{
@@ -658,18 +721,24 @@ $("restoreBtn").addEventListener("click",()=>{
    const d=JSON.parse(String(r.result));
    if(!d||typeof d!=="object"||Array.isArray(d))throw Error("Backup inválido");
    const pick=(k,a,def)=>first(d,[k,...a],def);
-   const newProducts=arr(pick(KEYS.stock,["stock","products","estoque"],[])).map(normalizeProduct);
-   const newSales=arr(pick(KEYS.sales,["sales","vendas"],[]));
-   const newHistory=arr(pick(KEYS.history,["history","historico"],[]));
-   const newExpenses=arr(pick(KEYS.expenses,["expenses","despesas"],[]));
-   const newAccounts=arr(pick(KEYS.accounts,["accounts","contas"],[])).map(normalizeAccount);
-   let newConfig=pick(KEYS.config,["config"],{});
-   if(!newConfig||typeof newConfig!=="object"||Array.isArray(newConfig))newConfig={};
-   if(!Array.isArray(newConfig.cashMovements))newConfig.cashMovements=[];
-   products=newProducts;sales=newSales;history=newHistory;expenses=newExpenses;accounts=newAccounts;config=newConfig;
-   if(!persist())throw Error("Não foi possível salvar os dados restaurados.");
-   renderAll();toast("Backup restaurado.");
-  }catch(e){toast("Backup inválido, incompatível ou sem espaço para salvar. Os dados podem precisar de recuperação pelo backup anterior.")}
+   const hasKnown=Object.keys(KEYS).some(k=>Object.prototype.hasOwnProperty.call(d,KEYS[k]));
+   if(!hasKnown&&!("products" in d)&&!("stock" in d)&&!("vendas" in d)&&!("sales" in d))throw Error("Formato de backup não reconhecido");
+   const np=arr(pick(KEYS.stock,["stock","products","estoque"],[])).map(normalizeProduct);
+   const ns=arr(pick(KEYS.sales,["sales","vendas"],[]));
+   const nh=arr(pick(KEYS.history,["history","historico"],[]));
+   const ne=arr(pick(KEYS.expenses,["expenses","despesas"],[]));
+   const na=arr(pick(KEYS.accounts,["accounts","contas"],[])).map(normalizeAccount);
+   let nc=pick(KEYS.config,["config"],{});
+   if(!nc||typeof nc!=="object"||Array.isArray(nc))nc={};
+   if(!Array.isArray(nc.cashMovements))nc.cashMovements=[];
+   const old={products,sales,history,expenses,accounts,config};
+   products=np;sales=ns;history=nh;expenses=ne;accounts=na;config=nc;
+   if(!persist()){
+    products=old.products;sales=old.sales;history=old.history;expenses=old.expenses;accounts=old.accounts;config=old.config;
+    persist();throw Error("Sem espaço para salvar o backup restaurado.");
+   }
+   renderAll();$("restoreFile").value="";toast("Backup restaurado com sucesso.");
+  }catch(e){toast("Não foi possível restaurar: arquivo inválido, incompatível ou armazenamento cheio. Seus dados anteriores foram mantidos quando possível.");}
  };
  r.readAsText(f);
 });
@@ -680,7 +749,7 @@ function initialize(){
  $("reportStart").value=today();$("reportEnd").value=today();$("debtDate").value=today();
  renderAll();
 }
-try{initialize()}catch(e){console.error(e);toast("Erro ao iniciar. Faça backup e confira o código.")}
+try{initialize()}catch(e){console.error(e);toast("Erro ao iniciar. Faça backup e confira o código.");}
 })();
 </script>
 </body>
