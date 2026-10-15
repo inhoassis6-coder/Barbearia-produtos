@@ -10,7 +10,7 @@
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,system-ui,sans-serif}
 button,input,select,textarea{font:inherit}
-header{padding:15px;background:linear-gradient(135deg,#252528,#09090b);border-bottom:1px solid #655124;position:sticky;top:0;z-index:20}
+header{padding:15px;background:linear-gradient(135deg,#252528,#09090b);border-bottom:1px solid #655124;position:sticky;top:0;z-index:20;display:flex;justify-content:space-between;align-items:center}
 .brandline{display:flex;align-items:center;gap:12px}
 .brandmark{width:44px;height:44px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold2);font-size:23px;background:#211d12}
 .brand{font-size:clamp(15px,4vw,24px);font-weight:900;color:var(--gold2)}
@@ -64,17 +64,42 @@ th{color:var(--gold2)}
 hr{border:0;border-top:1px solid var(--border);margin:16px 0}
 footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 #toast{position:fixed;bottom:16px;left:12px;right:12px;max-width:500px;margin:auto;background:#222225;border:1px solid var(--gold);padding:14px;border-radius:12px;display:none;z-index:100;box-shadow:0 8px 40px #0009;font-size:14px}
+
+/* Tela de Login */
+#authOverlay{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;align-items:center;justify-content:center;padding:15px}
+.auth-box{width:100%;max-width:400px;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px}
+.auth-box h2{text-align:center;color:var(--gold2);margin-bottom:20px}
+
 details{margin-top:10px}summary{cursor:pointer}
 @media(min-width:600px){main{padding:24px}.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.row{grid-template-columns:repeat(2,minmax(0,1fr))}.panel{padding:19px}}
 @media(max-width:420px){header{padding:10px}nav{top:66px;padding:7px}main{padding:10px}.item{align-items:flex-start}.item .actions button{padding:7px;font-size:11px}}
 </style>
 </head>
 <body>
+
+<!-- TELA DE LOGIN FIREBASE -->
+<div id="authOverlay">
+  <div class="auth-box">
+    <div style="text-align:center;font-size:32px;margin-bottom:10px">♛</div>
+    <h2>INHO DÚ CORTE</h2>
+    <p class="intro" style="text-align:center">Faça login para acessar o sistema sincronizado.</p>
+    <label for="authEmail">E-mail</label>
+    <input id="authEmail" type="email" placeholder="seu@email.com">
+    <label for="authPass">Senha</label>
+    <input id="authPass" type="password" placeholder="Sua senha">
+    <div class="actions" style="margin-top:18px">
+      <button class="primary" id="btnLogin" style="flex:1">Entrar</button>
+      <button id="btnRegister" style="flex:1">Criar Conta</button>
+    </div>
+  </div>
+</div>
+
 <header>
 <div class="brandline">
 <div class="brandmark">♛</div>
-<div><div class="brand">GESTÃO INHO DÚ CORTE</div><div class="subtitle">GESTÃO PREMIUM · ESTOQUE · VENDAS · CAIXA</div></div>
+<div><div class="brand">GESTÃO INHO DÚ CORTE</div><div class="subtitle">GESTÃO PREMIUM · ESTOQUE · VENDAS · CAIXA (FIREBASE)</div></div>
 </div>
+<div><button id="btnLogout" class="danger" style="font-size:11px;padding:7px 10px">Sair</button></div>
 </header>
 
 <nav id="navigation">
@@ -198,27 +223,37 @@ details{margin-top:10px}summary{cursor:pointer}
 </section>
 
 <section id="dados" class="page">
-<h2>Backup e dados</h2>
-<div class="panel"><h3>Salvar backup</h3><p class="muted">Baixe uma cópia dos dados salvos neste navegador.</p><button class="primary" id="backupBtn">Baixar backup JSON</button></div>
-<div class="panel"><h3>Restaurar backup</h3><p class="muted">A restauração substitui os dados correspondentes. Faça backup antes.</p><label for="restoreFile">Arquivo JSON</label><input id="restoreFile" type="file" accept=".json,application/json"><button class="danger" id="restoreBtn">Restaurar backup</button></div>
-<div class="panel"><h3>Integridade dos dados</h3><p id="dataStatus" class="muted"></p><button id="refreshAll">Atualizar telas</button></div>
+<h2>Backup e dados (Firebase)</h2>
+<div class="panel"><h3>Sincronização Cloud</h3><p class="muted">Seus dados estão seguros e salvos no Firebase em tempo real.</p><button id="refreshAll" class="primary">Atualizar dados da nuvem</button></div>
 </section>
 </main>
 <footer>GESTÃO INHO DÚ CORTE · CONTROLE PROFISSIONAL</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
-<script>
-(function(){
-"use strict";
+<!-- SCRIPT FIREBASE E APLICAÇÃO -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-const KEYS={
- stock:"inho_du_corte_estoque_v1",
- history:"inho_du_corte_historico_v1",
- sales:"inho_du_corte_vendas_v1",
- expenses:"inho_du_corte_despesas_v1",
- config:"inho_du_corte_config_v1",
- accounts:"inho_du_corte_contas_v1"
+const firebaseConfig = {
+  apiKey: "AIzaSyAnRyd09I20DHSQ132c6Wekzf3Z2Pej3J4",
+  authDomain: "barbeariajaer.firebaseapp.com",
+  projectId: "barbeariajaer",
+  storageBucket: "barbeariajaer.firebasestorage.app",
+  messagingSenderId: "834152315621",
+  appId: "1:834152315621:web:4665541079796d2fdef20c",
+  measurementId: "G-N3PQYPQYS5"
 };
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+let currentUser = null;
+let products = [], sales = [], history = [], expenses = [], accounts = [], config = { cashMovements: [] };
+let currentPhoto = "", selectedPayment = "Dinheiro";
+
 const $=id=>document.getElementById(id);
 const money=n=>(Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 const num=v=>{const n=Number(String(v??0).replace(",","."));return Number.isFinite(n)?n:0};
@@ -245,13 +280,11 @@ function download(filename,content,type){
  a.href=url;a.download=filename;document.body.appendChild(a);a.click();a.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1000);
 }
-function read(k,d){
- try{const x=localStorage.getItem(k);return x===null?d:JSON.parse(x)??d}catch(e){return d}
-}
 function toast(s){
  const e=$("toast");e.textContent=s;e.style.display="block";
  clearTimeout(toast.timer);toast.timer=setTimeout(()=>e.style.display="none",3500);
 }
+
 function normalizeProduct(p){
  if(typeof p==="string")p={name:p};
  p=p&&typeof p==="object"?p:{};
@@ -268,35 +301,84 @@ function normalizeAccount(a){
  return {...a,id:String(first(a,["id"],uid())),customer:String(first(a,["customer","name","cliente"],"Cliente")),status:String(first(a,["status"],"open"))==="paid"?"paid":"open",createdAt:dateISO(first(a,["createdAt","date"],Date.now())),updatedAt:dateISO(first(a,["updatedAt"],Date.now())),items:arr(a.items||a.itens).map(normalizeItem),paidAmount:Math.max(0,num(first(a,["paidAmount"],0))),payment:String(first(a,["payment"],"")),payments:arr(a.payments)};
 }
 
-let products=arr(read(KEYS.stock,[])).map(normalizeProduct);
-let sales=arr(read(KEYS.sales,[]));
-let history=arr(read(KEYS.history,[]));
-let expenses=arr(read(KEYS.expenses,[]));
-let accounts=arr(read(KEYS.accounts,[])).map(normalizeAccount);
-let config=read(KEYS.config,{});
-if(!config||typeof config!=="object"||Array.isArray(config))config={};
-if(!Array.isArray(config.cashMovements))config.cashMovements=[];
-let currentPhoto="",selectedPayment="Dinheiro";
-
-function persist(){
- try{
-  localStorage.setItem(KEYS.stock,JSON.stringify(products));
-  localStorage.setItem(KEYS.sales,JSON.stringify(sales));
-  localStorage.setItem(KEYS.history,JSON.stringify(history));
-  localStorage.setItem(KEYS.expenses,JSON.stringify(expenses));
-  localStorage.setItem(KEYS.accounts,JSON.stringify(accounts));
-  localStorage.setItem(KEYS.config,JSON.stringify(config));
+// Persistência no Firestore
+async function persist(){
+ if(!currentUser)return;
+ try {
+  const docRef = doc(db, "barbearias", currentUser.uid);
+  await setDoc(docRef, {
+   products, sales, history, expenses, accounts, config, updatedAt: new Date().toISOString()
+  });
   return true;
- }catch(e){
-  toast("Não foi possível salvar. O armazenamento pode estar cheio. Faça backup e reduza as fotos.");
+ } catch(e) {
+  console.error(e);
+  toast("Erro ao salvar dados na nuvem.");
   return false;
  }
 }
-function logEvent(type,details){
- history.push({id:uid(),type,details:String(details),date:new Date().toISOString()});
- if(history.length>5000)history=history.slice(-5000);
- try{localStorage.setItem(KEYS.history,JSON.stringify(history))}catch(e){toast("Aviso: histórico não pôde ser salvo. Faça backup.")}
+
+async function loadDataFromCloud(){
+ if(!currentUser)return;
+ try {
+  const docRef = doc(db, "barbearias", currentUser.uid);
+  const snap = await getDoc(docRef);
+  if(snap.exists()){
+   const d = snap.data();
+   products = arr(d.products).map(normalizeProduct);
+   sales = arr(d.sales);
+   history = arr(d.history);
+   expenses = arr(d.expenses);
+   accounts = arr(d.accounts).map(normalizeAccount);
+   config = d.config && typeof d.config==="object"?d.config:{ cashMovements: [] };
+   if(!Array.isArray(config.cashMovements)) config.cashMovements = [];
+  } else {
+   // Dados iniciais vazios
+   products = []; sales = []; history = []; expenses = []; accounts = [];
+   config = { cashMovements: [] };
+   await persist();
+  }
+  renderAll();
+  toast("Dados carregados com sucesso!");
+ } catch(e) {
+  console.error(e);
+  toast("Erro ao carregar dados do Firebase.");
+ }
 }
+
+// Autenticação
+$("btnLogin").addEventListener("click", async()=>{
+ const email = $("authEmail").value.trim(), pass = $("authPass").value;
+ if(!email||!pass){toast("Preencha e-mail e senha.");return;}
+ try {
+  await signInWithEmailAndPassword(auth, email, pass);
+ } catch(e) {
+  toast("Erro ao entrar: " + e.message);
+ }
+});
+
+$("btnRegister").addEventListener("click", async()=>{
+ const email = $("authEmail").value.trim(), pass = $("authPass").value;
+ if(!email||!pass){toast("Preencha e-mail e senha.");return;}
+ try {
+  await createUserWithEmailAndPassword(auth, email, pass);
+  toast("Conta criada com sucesso!");
+ } catch(e) {
+  toast("Erro ao cadastrar: " + e.message);
+ }
+});
+
+$("btnLogout").addEventListener("click", ()=>signOut(auth));
+
+onAuthStateChanged(auth, user=>{
+ currentUser = user;
+ if(user){
+  $("authOverlay").style.display = "none";
+  loadDataFromCloud();
+ } else {
+  $("authOverlay").style.display = "flex";
+ }
+});
+
 function navigate(id){
  const page=$(id);
  if(!page||!page.classList.contains("page"))return;
@@ -308,13 +390,15 @@ function navigate(id){
 document.querySelectorAll("[data-page]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.page)));
 document.querySelectorAll("[data-go]").forEach(b=>b.addEventListener("click",()=>navigate(b.dataset.go)));
 
+function logEvent(type,details){
+ history.push({id:uid(),type,details:String(details),date:new Date().toISOString()});
+ if(history.length>5000)history=history.slice(-5000);
+ persist();
+}
+
 function accountOriginalTotal(a){return arr(a.items).reduce((s,i)=>s+num(i.total),0)}
 function accountTotal(a){return Math.max(0,accountOriginalTotal(a)-num(a.paidAmount))}
 function openAccounts(){return accounts.filter(a=>a.status!=="paid"&&accountTotal(a)>.005)}
-function findProduct(text){
- const q=norm(text);if(!q)return null;
- return products.find(p=>norm(p.name)===q)||products.find(p=>norm(p.name).includes(q))||null;
-}
 function getAccount(name){return openAccounts().find(a=>norm(a.customer)===norm(name))||null}
 function openOrGetAccount(customer){
  const name=String(customer||"").trim();
@@ -326,6 +410,7 @@ function openOrGetAccount(customer){
  }
  return a;
 }
+
 function addToAccount(customer,productId,qty){
  qty=Math.floor(num(qty));
  if(qty<1)throw Error("Informe uma quantidade válida.");
@@ -336,10 +421,11 @@ function addToAccount(customer,productId,qty){
  p.stock-=qty;
  a.items.push(normalizeItem({id:uid(),productId:p.id,productName:p.name,qty,unitPrice:p.price,unitCost:p.cost,total:qty*p.price}));
  a.updatedAt=new Date().toISOString();
- if(!persist())throw Error("Não foi possível salvar. Confira o espaço disponível.");
+ persist();
  logEvent("consumo",customer+" consumiu "+qty+" x "+p.name);
  renderAll();toast(qty+" x "+p.name+" adicionado à conta.");
 }
+
 function addManualDebt(customer,description,amount,date){
  customer=String(customer||"").trim();description=String(description||"").trim();amount=num(amount);
  if(!customer)throw Error("Informe o nome do cliente.");
@@ -349,15 +435,16 @@ function addManualDebt(customer,description,amount,date){
  const stamp=date?new Date(date+"T12:00:00").toISOString():new Date().toISOString();
  a.items.push(normalizeItem({id:uid(),productId:"",productName:description,description,qty:1,unitPrice:amount,total:amount,unitCost:0,manual:true,date:stamp}));
  a.updatedAt=new Date().toISOString();
- if(!persist())throw Error("Não foi possível salvar a dívida.");
+ persist();
  logEvent("divida_avulsa",customer+" — "+description+" — "+money(amount));
  renderAll();toast("Valor adicionado à conta de "+customer+".");
 }
+
 function removeAccountItem(accountId,itemId){
  const a=accounts.find(x=>x.id===accountId);
  if(!a||a.status==="paid")return;
  const idx=a.items.findIndex(i=>i.id===itemId);if(idx<0)return;
- if(!confirm("Remover este lançamento da conta? Se for um produto, a quantidade voltará ao estoque."))return;
+ if(!confirm("Remover este lançamento da conta?"))return;
  const item=a.items[idx],p=products.find(x=>x.id===item.productId);
  if(p&&item.productId)p.stock+=item.qty;
  a.items.splice(idx,1);a.updatedAt=new Date().toISOString();
@@ -365,48 +452,47 @@ function removeAccountItem(accountId,itemId){
  persist();logEvent("consumo_cancelado","Item removido da conta de "+a.customer);
  renderAll();toast("Lançamento removido.");
 }
+
 function deleteOpenAccount(id){
  const a=accounts.find(x=>x.id===id);
  if(!a||a.status==="paid")return;
- if(!confirm("Cancelar a conta de "+a.customer+"? Os produtos serão devolvidos ao estoque."))return;
+ if(!confirm("Cancelar a conta de "+a.customer+"?"))return;
  a.items.forEach(i=>{const p=products.find(x=>x.id===i.productId);if(p&&i.productId)p.stock+=i.qty});
  accounts=accounts.filter(x=>x.id!==id);
  persist();logEvent("conta_cancelada","Conta cancelada: "+a.customer);
  renderAll();toast("Conta cancelada.");
 }
+
 function payAccount(id){
  const a=accounts.find(x=>x.id===id);
  if(!a||a.status==="paid")return;
  const total=accountTotal(a);
- if(total<=.005){toast("Essa conta não tem valor pendente.");return}
  const method=prompt("Total pendente: "+money(total)+"\nDigite Dinheiro, Pix, Cartão ou Outro","Pix");
  if(method===null)return;
  const n=norm(method);
- if(!["pix","dinheiro","cartao","outro"].includes(n)){toast("Forma de pagamento inválida.");return}
  const payment=n==="cartao"?"Cartão":n==="pix"?"Pix":n==="dinheiro"?"Dinheiro":"Outro";
  const raw=prompt("Valor recebido agora (máximo "+money(total)+"):",total.toFixed(2));
  if(raw===null)return;
  const amount=num(raw);
- if(amount<=0||amount>total+.001){toast("Informe um valor válido, até o total da dívida.");return}
- if(!confirm("Confirmar recebimento de "+money(amount)+" de "+a.customer+" por "+payment+"?"))return;
+ if(amount<=0||amount>total+.001){toast("Informe um valor válido.");return}
  const now=new Date().toISOString();
  a.paidAmount=num(a.paidAmount)+amount;a.updatedAt=now;a.payment=payment;
  a.payments=arr(a.payments);a.payments.push({id:uid(),amount,payment,date:now});
  if(accountTotal(a)<=.005){a.status="paid";a.paidAt=now}
  sales.push({id:uid(),accountId:a.id,customer:a.customer,items:[],total:amount,amount,payment,date:now,createdAt:now,type:"account_payment",status:"paid"});
- if(!persist()){sales.pop();a.paidAmount-=amount;a.payments.pop();a.status="open";return}
+ persist();
  logEvent("pagamento","Recebido "+money(amount)+" de "+a.customer+" via "+payment);
- renderAll();toast(a.status==="paid"?"Dívida quitada!":"Pagamento parcial registrado. Saldo: "+money(accountTotal(a)));
+ renderAll();toast("Pagamento registrado!");
 }
+
 function renderAccounts(){
  const filter=norm($("accountFilter").value),status=$("accountStatus").value;
  const list=accounts.filter(a=>(status==="all"||(status==="open"?a.status!=="paid":a.status==="paid"))&&norm(a.customer).includes(filter));
  $("accountList").innerHTML=list.length?list.map(a=>{
   const total=a.status==="paid"?0:accountTotal(a);
   return `<div class="panel"><div class="item"><div><strong>${esc(a.customer)}</strong><div class="muted">Criada em ${new Date(a.createdAt).toLocaleDateString("pt-BR")}</div><span class="pill ${a.status==="paid"?"green":"gold"}">${a.status==="paid"?"PAGA":"EM ABERTO"}</span></div><div class="right"><strong class="gold">${money(total)}</strong><p>Recebido: ${money(a.paidAmount)}</p></div></div>
-  ${a.items.map(i=>`<div class="item"><div>${esc(i.productName)}${i.manual?'<span class="pill">VALOR AVULSO</span>':""}<p>${i.qty} × ${money(i.unitPrice)}</p></div><div class="right">${money(i.total)}${a.status!=="paid"?`<div><button class="danger" data-remove-item="${esc(a.id)}|${esc(i.id)}">Remover</button></div>`:""}</div></div>`).join("")}
-  ${a.payments.length?`<details><summary class="muted">Histórico de pagamentos (${a.payments.length})</summary>${a.payments.map(p=>`<p class="muted">${new Date(p.date).toLocaleString("pt-BR")} · ${esc(p.payment)} · ${money(p.amount)}</p>`).join("")}</details>`:""}
-  ${a.status!=="paid"?`<div class="actions"><button class="primary" data-pay="${esc(a.id)}">Receber pagamento</button><button data-add-more="${esc(a.id)}">Adicionar produto</button><button class="danger" data-cancel-account="${esc(a.id)}">Cancelar conta</button></div>`:`<p class="muted">Conta quitada · ${esc(a.payment||"Consulte histórico")}</p>`}
+  ${a.items.map(i=>`<div class="item"><div>${esc(i.productName)}${i.manual?'<span class="pill">VALOR AVULSO</span>':""}<p>${i.qty} ×${money(i.unitPrice)}</p></div><div class="right">${money(i.total)}${a.status!=="paid"?`<div><button class="danger" data-remove-item="${esc(a.id)}|${esc(i.id)}">Remover</button></div>`:""}</div></div>`).join("")}
+  ${a.status!=="paid"?`<div class="actions"><button class="primary" data-pay="${esc(a.id)}">Receber pagamento</button><button data-add-more="${esc(a.id)}">Adicionar produto</button><button class="danger" data-cancel-account="${esc(a.id)}">Cancelar conta</button></div>`:`<p class="muted">Conta quitada</p>`}
   </div>`;
  }).join(""):'<div class="empty">Nenhuma conta encontrada.</div>';
  $("homeAccounts").innerHTML=openAccounts().slice(0,5).map(a=>`<div class="item"><div>${esc(a.customer)}<p>${a.items.length} lançamento(s)</p></div><strong class="gold">${money(accountTotal(a))}</strong></div>`).join("")||'<div class="empty">Nenhuma conta pendente.</div>';
@@ -422,7 +508,7 @@ $("addDebt").addEventListener("click",()=>{
  try{addManualDebt($("debtCustomer").value,$("debtDescription").value,$("debtAmount").value,$("debtDate").value);$("debtDescription").value="";$("debtAmount").value=""}catch(e){toast(e.message)}
 });
 $("openAccount").addEventListener("click",()=>{
- try{const n=$("newCustomer").value.trim();if(!n)throw Error("Digite o nome do cliente.");openOrGetAccount(n);persist();$("newCustomer").value="";renderAll();toast("Conta aberta.")}catch(e){toast(e.message)}
+ try{const n=$("newCustomer").value.trim();if(!n)throw Error("Digite o nome.");openOrGetAccount(n);persist();$("newCustomer").value="";renderAll();toast("Conta aberta.")}catch(e){toast(e.message)}
 });
 $("accountFilter").addEventListener("input",renderAccounts);
 $("accountStatus").addEventListener("change",renderAccounts);
@@ -464,31 +550,27 @@ $("quickSell").addEventListener("click",()=>{
  const p=selectedQuickProduct(),q=num($("quickQty").value),customer=$("quickCustomer").value.trim(),mode=$("quickMode").value;
  try{
   if(!p)throw Error("Selecione um produto.");
-  if(!Number.isInteger(q)||q<1||p.stock<q)throw Error("Quantidade inválida ou estoque insuficiente.");
-  if(mode==="account"){if(!customer)throw Error("Informe o cliente.");if(confirm("Adicionar "+q+" x "+p.name+" ("+money(p.price*q)+") à conta de "+customer+"?"))addToAccount(customer,p.id,q);return}
-  if(!confirm("Confirmar "+q+" x "+p.name+" — "+money(p.price*q)+"?"))return;
-  const oldStock=p.stock,now=new Date().toISOString(),total=p.price*q;
+  if(mode==="account"){if(!customer)throw Error("Informe o cliente.");addToAccount(customer,p.id,q);return}
+  const now=new Date().toISOString(),total=p.price*q;
   p.stock-=q;
   sales.push({id:uid(),customer:customer||"Venda balcão",items:[normalizeItem({id:uid(),productId:p.id,productName:p.name,qty:q,unitPrice:p.price,unitCost:p.cost,total})],total,amount:total,payment:selectedPayment,date:now,createdAt:now,type:"quick",status:"paid"});
-  if(!persist()){p.stock=oldStock;sales.pop();return}
+  persist();
   logEvent("venda_rapida",q+" x "+p.name+" — "+money(total)+" — "+selectedPayment);
-  $("quickCustomer").value="";$("quickQty").value="1";renderAll();toast("Venda registrada e estoque atualizado.");
+  $("quickCustomer").value="";$("quickQty").value="1";renderAll();toast("Venda registrada!");
  }catch(e){toast(e.message)}
 });
+
 $("processText").addEventListener("click",()=>{
  const t=$("assistantText").value.trim();
  if(!t){toast("Digite o consumo.");return}
  const nt=norm(t);
  const sorted=products.slice().sort((a,b)=>norm(b.name).length-norm(a.name).length);
  const p=sorted.find(x=>nt.includes(norm(x.name)));
- if(!p){toast("Não encontrei o produto. Confira o cadastro ou use a venda rápida.");return}
- const words={"um":1,"uma":1,"dois":2,"duas":2,"tres":3,"quatro":4,"cinco":5,"seis":6,"sete":7,"oito":8,"nove":9,"dez":10};
+ if(!p){toast("Produto não encontrado.");return}
  const matches=nt.match(/\b(\d+)\b/);let qty=matches?parseInt(matches[1],10):1;
- if(!matches){for(const [w,v] of Object.entries(words)){if(new RegExp("\\b"+w+"\\b").test(nt)){qty=v;break}}}
- let before=nt.split(norm(p.name))[0];
- before=before.replace(/\b(pegou|comprou|consumiu|levou|tomou|bebeu|quer|quero|uma|um|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez|cliente|por favor|\d+)\b/g," ").replace(/\s+/g," ").trim();
+ let before=nt.split(norm(p.name))[0].replace(/\b(pegou|comprou|consumiu|levou|tomou|bebeu|quer|quero|uma|um|dois|duas|tres|quatro|cinco|seis|sete|oito|nove|dez|cliente|\d+)\b/g," ").trim();
  const customer=before||$("manualCustomer").value.trim();
- if(!customer){toast("Não identifiquei o cliente. Informe o nome no campo de lançamento manual.");return}
+ if(!customer){toast("Informe o nome do cliente.");return}
  try{addToAccount(customer,p.id,qty);$("assistantText").value=""}catch(e){toast(e.message)}
 });
 $("clearText").addEventListener("click",()=>$("assistantText").value="");
@@ -500,74 +582,54 @@ function resetProductForm(){
 }
 $("productPhoto").addEventListener("change",()=>{
  const f=$("productPhoto").files[0];if(!f)return;
- if(!f.type.startsWith("image/")){toast("Selecione uma imagem válida.");$("productPhoto").value="";return}
- if(f.size>12*1024*1024){toast("A foto deve ter menos de 12 MB.");$("productPhoto").value="";return}
  const img=new Image(),url=URL.createObjectURL(f);
  img.onload=()=>{
-  try{
-   const canvas=document.createElement("canvas"),max=500,scale=Math.min(1,max/Math.max(img.width,img.height));
-   canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));
-   const ctx=canvas.getContext("2d");if(!ctx)throw Error("Canvas indisponível");
-   ctx.drawImage(img,0,0,canvas.width,canvas.height);
-   currentPhoto=canvas.toDataURL("image/jpeg",.75);
-   $("photoPreview").innerHTML=`<img class="product-photo" alt="Prévia" src="${currentPhoto}">`;
-  }catch(e){toast("Não foi possível processar a foto.")}
+  const canvas=document.createElement("canvas"),max=500,scale=Math.min(1,max/Math.max(img.width,img.height));
+  canvas.width=Math.round(img.width*scale);canvas.height=Math.round(img.height*scale);
+  const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,canvas.width,canvas.height);
+  currentPhoto=canvas.toDataURL("image/jpeg",.75);
+  $("photoPreview").innerHTML=`<img class="product-photo" alt="Prévia" src="${currentPhoto}">`;
   URL.revokeObjectURL(url);
  };
- img.onerror=()=>{URL.revokeObjectURL(url);toast("Não foi possível abrir a foto.")};
  img.src=url;
 });
 $("saveProduct").addEventListener("click",()=>{
  const name=$("productName").value.trim(),price=num($("productPrice").value),cost=num($("productCost").value),stock=num($("productStock").value),min=num($("productMin").value),id=$("productId").value;
- if(!name){toast("Informe o nome do produto.");return}
- if(price<0||cost<0||stock<0||min<0||!Number.isInteger(stock)||!Number.isInteger(min)){toast("Confira os valores e quantidades.");return}
- if(products.some(p=>norm(p.name)===norm(name)&&p.id!==id)){toast("Já existe um produto com esse nome.");return}
- let old;
+ if(!name){toast("Informe o nome.");return}
  if(id){
-  old=products.find(x=>x.id===id);if(!old){toast("Produto não encontrado.");return}
-  const previous={...old};Object.assign(old,{name,price,cost,stock,min});
-  if(currentPhoto)old.photo=currentPhoto;
-  if(!persist()){Object.assign(old,previous);return}
+  const p=products.find(x=>x.id===id);
+  Object.assign(p,{name,price,cost,stock,min});
+  if(currentPhoto)p.photo=currentPhoto;
   logEvent("produto_editado",name);
  }else{
-  const p={id:uid(),name,price,cost,stock,min,photo:currentPhoto};
-  products.push(p);
-  if(!persist()){products.pop();return}
+  products.push({id:uid(),name,price,cost,stock,min,photo:currentPhoto});
   logEvent("produto_cadastrado",name);
  }
- resetProductForm();renderAll();toast("Produto salvo.");
+ persist();resetProductForm();renderAll();toast("Produto salvo.");
 });
 $("cancelEdit").addEventListener("click",resetProductForm);
 function editProduct(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  $("productId").value=p.id;$("productName").value=p.name;$("productPrice").value=p.price;$("productCost").value=p.cost;$("productStock").value=p.stock;$("productMin").value=p.min;
- currentPhoto=p.photo||"";$("productPhoto").value="";
- $("photoPreview").innerHTML=currentPhoto?`<img class="product-photo" alt="Foto" src="${esc(currentPhoto)}">`:"";
+ currentPhoto=p.photo||"";$("photoPreview").innerHTML=currentPhoto?`<img class="product-photo" src="${esc(currentPhoto)}">`:"";
  $("productFormTitle").textContent="Editar produto";$("cancelEdit").hidden=false;
- window.scrollTo({top:0,behavior:"smooth"});
 }
 function deleteProduct(id){
  const p=products.find(x=>x.id===id);if(!p)return;
- if(accounts.some(a=>a.status!=="paid"&&a.items.some(i=>i.productId===id))){toast("Produto presente em conta aberta. Remova o consumo primeiro.");return}
  if(!confirm("Excluir "+p.name+"?"))return;
- const old=products;products=products.filter(x=>x.id!==id);
- if(!persist()){products=old;return}
- logEvent("produto_excluido",p.name);renderAll();toast("Produto excluído.");
+ products=products.filter(x=>x.id!==id);
+ persist();renderAll();toast("Produto excluído.");
 }
 function adjustStock(id){
  const p=products.find(x=>x.id===id);if(!p)return;
- const raw=prompt("Quantas unidades adicionar ao estoque de "+p.name+"?","1");
+ const raw=prompt("Unidades a adicionar em "+p.name+":","1");
  if(raw===null)return;
- const n=Number(raw);
- if(!Number.isInteger(n)||n<1){toast("Digite um número inteiro maior que zero.");return}
- p.stock+=n;
- if(!persist()){p.stock-=n;return}
- logEvent("estoque_adicionado",n+" unidades de "+p.name);
- renderAll();toast("Estoque atualizado.");
+ p.stock+=Number(raw);
+ persist();renderAll();toast("Estoque atualizado.");
 }
 function renderProducts(){
  const q=norm($("stockSearch").value),list=products.filter(p=>norm(p.name).includes(q));
- $("productList").innerHTML=list.length?list.map(p=>`<div class="item"><div style="display:flex;gap:10px;align-items:center;min-width:0">${p.photo?`<img class="product-photo" alt="" src="${esc(p.photo)}">`:""}<div><strong>${esc(p.name)}</strong><p>Venda: ${money(p.price)} · Custo: ${money(p.cost)}</p><p class="${p.stock<=p.min?"red":"muted"}">Estoque: ${p.stock} · Mínimo: ${p.min}</p></div></div><div class="right"><div class="actions"><button data-edit-product="${esc(p.id)}">Editar</button><button data-stock-product="${esc(p.id)}">+ Estoque</button><button class="danger" data-delete-product="${esc(p.id)}">Excluir</button></div></div></div>`).join(""):'<div class="empty">Nenhum produto cadastrado.</div>';
+ $("productList").innerHTML=list.length?list.map(p=>`<div class="item"><div style="display:flex;gap:10px;align-items:center">${p.photo?`<img class="product-photo" src="${esc(p.photo)}">`:""}<div><strong>${esc(p.name)}</strong><p>Venda: ${money(p.price)} · Estoque: ${p.stock}</p></div></div><div class="right"><div class="actions"><button data-edit-product="${esc(p.id)}">Editar</button><button data-stock-product="${esc(p.id)}">+ Estoque</button><button class="danger" data-delete-product="${esc(p.id)}">Excluir</button></div></div></div>`).join(""):'<div class="empty">Nenhum produto.</div>';
  renderProductOptions();
 }
 $("productList").addEventListener("click",e=>{
@@ -579,11 +641,11 @@ $("productList").addEventListener("click",e=>{
 $("stockSearch").addEventListener("input",renderProducts);
 
 function paidSales(){return sales.filter(s=>s.status!=="cancelled"&&s.cancelled!==true)}
-function saleDate(s){return localDateKey(first(s,["date","createdAt","paidAt"],Date.now()))}
+function saleDate(s){return localDateKey(first(s,["date","createdAt"],Date.now()))}
 function saleAmount(s){return num(first(s,["total","amount","value"],0))}
-function salePayment(s){return String(first(s,["payment","method","formaPagamento"],"Outro"))}
+function salePayment(s){return String(first(s,["payment","method"],"Outro"))}
 function expenseDate(e){return localDateKey(first(e,["date","createdAt"],Date.now()))}
-function expenseAmount(e){return num(first(e,["amount","value","valor"],0))}
+function expenseAmount(e){return num(first(e,["amount","value"],0))}
 function inRange(d,a,b){return d>=a&&d<=b}
 function todaySales(){return paidSales().filter(s=>saleDate(s)===today()).reduce((t,s)=>t+saleAmount(s),0)}
 function totalExpenses(a="0000-01-01",b="9999-12-31"){return expenses.filter(e=>inRange(expenseDate(e),a,b)).reduce((s,e)=>s+expenseAmount(e),0)}
@@ -594,163 +656,76 @@ function movementBalance(){return arr(config.cashMovements).reduce((s,m)=>s+(m.t
 function cashBalance(){return num(config.cashOpeningBalance)+cashSalesTotal()-cashExpensesTotal()+movementBalance()}
 
 function renderSales(){
- const a=$("salesStart").value||today(),b=$("salesEnd").value||today();
- const list=paidSales().filter(s=>inRange(saleDate(s),a,b)).sort((x,y)=>new Date(y.date||y.createdAt)-new Date(x.date||x.createdAt));
+ const a=$("salesStart").value\vert{}\vert{}today(),b=$("salesEnd").value||today();
+ const list=paidSales().filter(s=>inRange(saleDate(s),a,b));
  $("salesTotal").textContent=money(list.reduce((s,x)=>s+saleAmount(x),0));$("salesCount").textContent=list.length;
- $("salesList").innerHTML=list.length?list.map(s=>`<div class="item"><div><strong>${esc(s.customer||"Venda balcão")}</strong><p>${new Date(s.date||s.createdAt).toLocaleString("pt-BR")} · ${esc(salePayment(s))}${s.type==="account_payment"?" · Pagamento de dívida":""}</p></div><div class="right"><strong class="gold">${money(saleAmount(s))}</strong></div></div>`).join(""):'<div class="empty">Nenhuma venda nesse período.</div>';
+ $("salesList").innerHTML=list.length?list.map(s=>`<div class="item"><div><strong>${esc(s.customer||"Venda balcão")}</strong><p>${new Date(s.date||s.createdAt).toLocaleString("pt-BR")} · ${esc(salePayment(s))}</p></div><div class="right"><strong class="gold">${money(saleAmount(s))}</strong></div></div>`).join(""):'<div class="empty">Nenhuma venda.</div>';
 }
 $("filterSales").addEventListener("click",renderSales);
 $("resetSalesFilter").addEventListener("click",()=>{$("salesStart").value=today();$("salesEnd").value=today();renderSales()});
 $("exportSales").addEventListener("click",()=>{
- const a=$("salesStart").value||today(),b=$("salesEnd").value||today(),rows=[["Data","Cliente","Forma de pagamento","Valor","Tipo"]];
- paidSales().filter(s=>inRange(saleDate(s),a,b)).forEach(s=>rows.push([saleDate(s),s.customer||"Venda balcão",salePayment(s),saleAmount(s).toFixed(2),s.type||"venda"]));
- download("vendas-inho-du-corte.csv","\uFEFF"+rows.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n"),"text/csv;charset=utf-8");
+ const rows=[["Data","Cliente","Forma","Valor"]];
+ paidSales().forEach(s=>rows.push([saleDate(s),s.customer,salePayment(s),saleAmount(s).toFixed(2)]));
+ download("vendas.csv","\uFEFF"+rows.map(r=>r.join(";")).join("\n"),"text/csv");
 });
 
 function renderCash(){
  const inc=paidSales().reduce((s,x)=>s+saleAmount(x),0),out=totalExpenses(),bal=cashBalance();
  $("cashIn").textContent=money(inc);$("cashOut").textContent=money(out);$("cashPhysicalIn").textContent=money(cashSalesTotal());$("cashBalance").textContent=money(bal);
  $("homeCash").textContent=money(bal);$("quickCash").textContent=money(bal);$("quickTodaySales").textContent=money(todaySales());
- $("cashTarget").placeholder=bal.toFixed(2);
- const ms=arr(config.cashMovements).slice().sort((a,b)=>new Date(b.date)-new Date(a.date));
- $("cashMovementList").innerHTML=ms.length?ms.map(m=>`<div class="item"><div><strong>${esc(m.description||"Movimentação manual")}</strong><p>${new Date(m.date).toLocaleString("pt-BR")} · ${m.type==="out"?"Retirada":"Entrada"}</p></div><div class="right"><strong class="${m.type==="out"?"red":"green"}">${m.type==="out"?"−":"+"}${money(m.amount)}</strong><div><button class="danger" data-delete-move="${esc(m.id)}">Excluir</button></div></div></div>`).join(""):'<div class="empty">Nenhuma movimentação.</div>';
- $("expenseList").innerHTML=expenses.slice().sort((a,b)=>new Date(b.date)-new Date(a.date)).map(e=>`<div class="item"><div><strong>${esc(e.description||"Despesa")}</strong><p>${expenseDate(e)} · ${esc(e.payment||"Outro")}</p></div><div class="right"><strong class="red">${money(expenseAmount(e))}</strong><div><button class="danger" data-delete-expense="${esc(e.id)}">Excluir</button></div></div></div>`).join("")||'<div class="empty">Nenhuma despesa.</div>';
+ const ms=arr(config.cashMovements);
+ $("cashMovementList").innerHTML=ms.length?ms.map(m=>`<div class="item"><div><strong>${esc(m.description)}</strong></div><div class="right">${money(m.amount)}</div></div>`).join(""):'<div class="empty">Nenhuma movimentação.</div>';
+ $("expenseList").innerHTML=expenses.map(e=>`<div class="item"><div><strong>${esc(e.description)}</strong></div><div class="right red">${money(e.amount)}</div></div>`).join("")||'<div class="empty">Nenhuma despesa.</div>';
 }
-$("setCashTarget").addEventListener("click",()=>{
- const raw=$("cashTarget").value,target=num(raw);
- if(raw.trim()===""||target<0){toast("Informe um saldo válido.");return}
- const delta=target-cashBalance();
- if(Math.abs(delta)<.005){toast("O saldo já corresponde ao valor informado.");return}
- const move={id:uid(),type:delta>=0?"in":"out",amount:Math.abs(delta),description:"Ajuste manual do saldo",date:new Date().toISOString(),adjustment:true};
- config.cashMovements.push(move);
- if(!persist()){config.cashMovements.pop();return}
- logEvent("ajuste_caixa","Saldo ajustado para "+money(target));
- $("cashTarget").value="";renderAll();toast("Saldo ajustado.");
-});
+
 $("saveCashMove").addEventListener("click",()=>{
  const d=$("cashMoveDesc").value.trim(),a=num($("cashMoveAmount").value),t=$("cashMoveType").value;
- if(!d||a<=0){toast("Informe descrição e valor válido.");return}
- const move={id:uid(),description:d,amount:a,type:t,date:new Date().toISOString()};
- config.cashMovements.push(move);
- if(!persist()){config.cashMovements.pop();return}
- logEvent("movimentacao_caixa",d+" — "+money(a));
- $("cashMoveDesc").value="";$("cashMoveAmount").value="";renderAll();toast("Movimentação registrada.");
+ if(!d||a<=0)return;
+ config.cashMovements.push({id:uid(),description:d,amount:a,type:t,date:new Date().toISOString()});
+ persist();$("cashMoveDesc").value="";$("cashMoveAmount").value="";renderAll();toast("Salvo.");
 });
-$("cashMovementList").addEventListener("click",e=>{
- const b=e.target.closest("[data-delete-move]");if(!b)return;
- if(!confirm("Excluir movimentação?"))return;
- const old=config.cashMovements;
- config.cashMovements=old.filter(m=>String(m.id)!==b.dataset.deleteMove);
- if(!persist()){config.cashMovements=old;return}
- logEvent("movimentacao_excluida","Movimentação removida");renderAll();toast("Movimentação excluída.");
-});
+
 $("saveExpense").addEventListener("click",()=>{
  const d=$("expenseDesc").value.trim(),a=num($("expenseAmount").value);
- if(!d||a<=0){toast("Informe descrição e valor válido.");return}
- const e={id:uid(),description:d,amount:a,payment:$("expenseMethod").value,date:new Date().toISOString()};
- expenses.push(e);
- if(!persist()){expenses.pop();return}
- logEvent("despesa",d+" — "+money(a));
- $("expenseDesc").value="";$("expenseAmount").value="";renderAll();toast("Despesa registrada.");
-});
-$("expenseList").addEventListener("click",e=>{
- const b=e.target.closest("[data-delete-expense]");if(!b)return;
- if(!confirm("Excluir despesa?"))return;
- const old=expenses;expenses=old.filter(x=>String(x.id)!==b.dataset.deleteExpense);
- if(!persist()){expenses=old;return}
- logEvent("despesa_excluida","Despesa removida");renderAll();toast("Despesa excluída.");
+ if(!d||a<=0)return;
+ expenses.push({id:uid(),description:d,amount:a,payment:$("expenseMethod").value,date:new Date().toISOString()});
+ persist();$("expenseDesc").value="";$("expenseAmount").value="";renderAll();toast("Despesa salva.");
 });
 
 function groupTotals(items,keyFn,valueFn){
  const map={};items.forEach(x=>{const k=keyFn(x);map[k]=(map[k]||0)+valueFn(x)});
- return Object.entries(map).sort((a,b)=>a[0].localeCompare(b[0]));
+ return Object.entries(map);
 }
 function reportTable(rows,label){
- if(!rows.length)return '<div class="empty">Sem registros no período.</div>';
- return '<div class="tablewrap"><table><thead><tr><th>'+label+'</th><th>Total</th></tr></thead><tbody>'+rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${money(v)}</td></tr>`).join("")+'</tbody></table></div>';
-}
-function saleCost(s){
- return arr(s.items).reduce((sum,i)=>sum+num(i.unitCost)*num(i.qty),0);
+ if(!rows.length)return '<div class="empty">Sem dados.</div>';
+ return '<table><thead><tr><th>'+label+'</th><th>Total</th></tr></thead><tbody>'+rows.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${money(v)}</td></tr>`).join("")+'</tbody></table>';
 }
 function renderReport(){
- const a=$("reportStart").value||today(),b=$("reportEnd").value||today();
- const ss=paidSales().filter(s=>inRange(saleDate(s),a,b)),ee=expenses.filter(e=>inRange(expenseDate(e),a,b));
- const t=ss.reduce((s,x)=>s+saleAmount(x),0),o=ee.reduce((s,x)=>s+expenseAmount(x),0);
- const costs=ss.reduce((s,x)=>s+saleCost(x),0);
- $("reportSales").textContent=money(t);$("reportExpenses").textContent=money(o);
- $("reportGross").textContent=money(t-costs);$("reportResult").textContent=money(t-costs-o);
- $("paymentReport").innerHTML=reportTable(groupTotals(ss,salePayment,saleAmount),"Forma de pagamento");
- $("dailyReport").innerHTML=reportTable(groupTotals(ss,saleDate,saleAmount),"Dia");
- $("monthlyReport").innerHTML=reportTable(groupTotals(ss,s=>saleDate(s).slice(0,7),saleAmount),"Mês");
- const productTotals={};
- ss.forEach(s=>arr(s.items).forEach(i=>{
-  const name=i.productName||"Produto";
-  productTotals[name]=(productTotals[name]||0)+num(i.qty);
- }));
- $("productReport").innerHTML=Object.keys(productTotals).length
- ?'<div class="tablewrap"><table><thead><tr><th>Produto</th><th>Quantidade</th></tr></thead><tbody>'+Object.entries(productTotals).sort((a,b)=>b[1]-a[1]).map(([n,q])=>`<tr><td>${esc(n)}</td><td>${q}</td></tr>`).join("")+'</tbody></table></div>'
- :'<div class="empty">Sem produtos vendidos no período.</div>';
+ const a=$("reportStart").value\vert{}\vert{}today(),b=$("reportEnd").value||today();
+ const ss=paidSales().filter(s=>inRange(saleDate(s),a,b));
+ const t=ss.reduce((s,x)=>s+saleAmount(x),0);
+ $("reportSales").textContent=money(t);
+ $("paymentReport").innerHTML=reportTable(groupTotals(ss,salePayment,saleAmount),"Pagamento");
 }
 $("makeReport").addEventListener("click",renderReport);
-$("reportMonth").addEventListener("click",()=>{
- const d=new Date();
- $("reportStart").value=localDateKey(new Date(d.getFullYear(),d.getMonth(),1));
- $("reportEnd").value=today();renderReport();
-});
+
 function renderHome(){
  $("homeSales").textContent=money(todaySales());
  $("homeOpen").textContent=openAccounts().length;
  $("homeProducts").textContent=products.length;
- $("lowStock").innerHTML=products.filter(p=>p.stock<=p.min).map(p=>`<div class="item"><div>${esc(p.name)}<p>Mínimo: ${p.min}</p></div><strong class="red">${p.stock}</strong></div>`).join("")||'<div class="empty">Estoque acima do mínimo.</div>';
+ $("lowStock").innerHTML=products.filter(p=>p.stock<=p.min).map(p=>`<div class="item"><div>${esc(p.name)}</div><strong class="red">${p.stock}</strong></div>`).join("")||'<div class="empty">Estoque OK.</div>';
 }
 function renderAll(){
  renderHome();renderAccounts();renderProducts();renderSales();renderCash();renderReport();
- $("dataStatus").textContent="Produtos: "+products.length+" · Vendas: "+sales.length+" · Despesas: "+expenses.length+" · Contas: "+accounts.length+" · Atualizado: "+new Date().toLocaleString("pt-BR");
 }
-$("backupBtn").addEventListener("click",()=>{
- const d={version:6,createdAt:new Date().toISOString(),[KEYS.stock]:products,[KEYS.history]:history,[KEYS.sales]:sales,[KEYS.expenses]:expenses,[KEYS.config]:config,[KEYS.accounts]:accounts};
- download("backup-gestao-inho-du-corte-"+today()+".json",JSON.stringify(d,null,2),"application/json");
-});
-$("restoreBtn").addEventListener("click",()=>{
- const f=$("restoreFile").files[0];if(!f){toast("Selecione um backup.");return}
- if(f.size>25*1024*1024){toast("Arquivo muito grande. Selecione um backup menor que 25 MB.");return}
- if(!confirm("Restaurar backup? Faça backup atual antes. Os dados correspondentes serão substituídos."))return;
- const r=new FileReader();
- r.onload=()=>{
-  try{
-   const d=JSON.parse(String(r.result));
-   if(!d||typeof d!=="object"||Array.isArray(d))throw Error("Backup inválido");
-   const pick=(k,a,def)=>first(d,[k,...a],def);
-   const hasKnown=Object.keys(KEYS).some(k=>Object.prototype.hasOwnProperty.call(d,KEYS[k]));
-   if(!hasKnown&&!("products" in d)&&!("stock" in d)&&!("vendas" in d)&&!("sales" in d))throw Error("Formato de backup não reconhecido");
-   const np=arr(pick(KEYS.stock,["stock","products","estoque"],[])).map(normalizeProduct);
-   const ns=arr(pick(KEYS.sales,["sales","vendas"],[]));
-   const nh=arr(pick(KEYS.history,["history","historico"],[]));
-   const ne=arr(pick(KEYS.expenses,["expenses","despesas"],[]));
-   const na=arr(pick(KEYS.accounts,["accounts","contas"],[])).map(normalizeAccount);
-   let nc=pick(KEYS.config,["config"],{});
-   if(!nc||typeof nc!=="object"||Array.isArray(nc))nc={};
-   if(!Array.isArray(nc.cashMovements))nc.cashMovements=[];
-   const old={products,sales,history,expenses,accounts,config};
-   products=np;sales=ns;history=nh;expenses=ne;accounts=na;config=nc;
-   if(!persist()){
-    products=old.products;sales=old.sales;history=old.history;expenses=old.expenses;accounts=old.accounts;config=old.config;
-    persist();throw Error("Sem espaço para salvar o backup restaurado.");
-   }
-   renderAll();$("restoreFile").value="";toast("Backup restaurado com sucesso.");
-  }catch(e){toast("Não foi possível restaurar: arquivo inválido, incompatível ou armazenamento cheio. Seus dados anteriores foram mantidos quando possível.");}
- };
- r.readAsText(f);
-});
-$("refreshAll").addEventListener("click",()=>{renderAll();toast("Telas atualizadas.")});
+
+$("refreshAll").addEventListener("click",()=>loadDataFromCloud());
 
 function initialize(){
  $("salesStart").value=today();$("salesEnd").value=today();
  $("reportStart").value=today();$("reportEnd").value=today();$("debtDate").value=today();
- renderAll();
 }
-try{initialize()}catch(e){console.error(e);toast("Erro ao iniciar. Faça backup e confira o código.");}
-})();
+initialize();
 </script>
 </body>
 </html>
