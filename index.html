@@ -95,6 +95,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
   </div>
  </div>
 </header>
+
 <nav id="navigation">
  <button data-page="assistente" class="primary">✦ Assistente</button>
  <button data-page="inicio">Painel</button>
@@ -105,6 +106,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
  <button data-page="relatorios">Relatórios</button>
  <button data-page="dados">Backup</button>
 </nav>
+
 <main>
 <section id="assistente" class="page active">
  <div class="hero">
@@ -112,10 +114,12 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
   <h2>Fala, parceiro. Vamos registrar uma venda?</h2>
   <p>Escolha o produto, ajuste a quantidade e confirme o pagamento. O estoque é atualizado automaticamente.</p>
  </div>
+
  <div class="grid">
   <div class="stat"><small>Vendas de hoje</small><strong id="quickTodaySales">R$ 0,00</strong></div>
   <div class="stat"><small>Dinheiro disponível</small><strong id="quickCash">R$ 0,00</strong></div>
  </div>
+
  <div class="panel">
   <h3>⚡ Venda rápida</h3>
   <p class="muted">Preencha apenas o necessário. O cliente é opcional para vendas pagas.</p>
@@ -128,18 +132,22 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
    </div></div>
    <div><label for="quickCustomer">Nome do cliente (opcional)</label><input id="quickCustomer" placeholder="Ex.: João"></div>
   </div>
+
   <label>Como foi o pagamento?</label>
   <div class="method-grid" id="paymentMethods">
    <button type="button" class="method-option selected" data-method="Dinheiro">💵 Dinheiro</button>
    <button type="button" class="method-option" data-method="Pix">▦ Pix</button>
    <button type="button" class="method-option" data-method="Cartão">▤ Cartão</button>
   </div>
+
   <label for="quickMode">Situação da venda</label>
   <select id="quickMode"><option value="paid">Venda paga — registrar recebimento</option><option value="account">Anotar na conta — cliente pagará depois</option></select>
+
   <div class="quick-total"><div><span class="muted">Total da venda</span><br><strong id="quickTotal">R$ 0,00</strong></div><div class="muted" id="quickStock">Estoque: —</div></div>
   <button type="button" class="primary quick-submit" id="quickSell">✓ Confirmar venda</button>
   <div class="actions"><button type="button" id="quickClear">Limpar campos</button></div>
  </div>
+
  <div class="panel">
   <h3>Ou fale com o assistente por texto</h3>
   <p class="muted">Exemplo: “João pegou duas águas”. Para registrar uma venda paga com mais opções, use a venda rápida acima.</p>
@@ -152,6 +160,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
   <div class="actions"><button class="primary" id="manualAdd">Adicionar à conta</button></div>
  </div>
 </section>
+
 <section id="inicio" class="page">
  <h2>Painel da barbearia</h2><p class="intro">Resumo da operação e indicadores.</p>
  <div class="grid">
@@ -164,12 +173,14 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
  <div class="panel"><h3>Estoque baixo</h3><div id="lowStock"></div></div>
  <div class="panel"><h3>Contas pendentes recentes</h3><div id="homeAccounts"></div></div>
 </section>
+
 <section id="contas" class="page">
  <h2>Contas dos clientes</h2><p class="intro">Acompanhe consumos, pendências e recebimentos.</p>
  <div class="panel"><label for="newCustomer">Abrir conta para cliente</label><input id="newCustomer" placeholder="Nome do cliente"><div class="actions"><button class="primary" id="openAccount">Abrir conta</button></div></div>
  <div class="row"><div><label for="accountFilter">Buscar cliente</label><input id="accountFilter" placeholder="Nome do cliente"></div><div><label for="accountStatus">Situação</label><select id="accountStatus"><option value="all">Todas</option><option value="open">Em aberto</option><option value="paid">Pagas</option></select></div></div>
  <div id="accountList"></div>
 </section>
+
 <section id="estoque" class="page">
  <h2>Estoque e produtos</h2><p class="intro">Cadastro, custo, preço de venda e fotos.</p>
  <div class="panel">
@@ -177,17 +188,23 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
   <label for="productName">Nome do produto</label><input id="productName" placeholder="Ex.: Água mineral">
   <div class="row"><div><label for="productPrice">Preço de venda (R$)</label><input id="productPrice" type="number" min="0" step=".01" placeholder="3,00"></div><div><label for="productCost">Custo por unidade (R$)</label><input id="productCost" type="number" min="0" step=".01" placeholder="1,50"></div></div>
   <div class="row"><div><label for="productStock">Quantidade em estoque</label><input id="productStock" type="number" min="0" step="1" placeholder="10"></div><div><label for="productMin">Estoque mínimo</label><input id="productMin" type="number" min="0" step="1" value="2"></div></div>
-  <label for="productPhoto">Foto do produto (opcional, até 700 KB)</label><input id="productPhoto" type="file" accept="image/*"><div id="photoPreview"></div>
+
+  <label for="productPhoto">Foto do produto (opcional, sem limite definido pelo sistema)</label>
+  <input id="productPhoto" type="file" accept="image/*">
+  <div id="photoPreview"></div>
+
   <div class="actions"><button class="primary" id="saveProduct">Salvar produto</button><button id="cancelEdit" hidden>Cancelar edição</button></div>
  </div>
  <label for="stockSearch">Buscar produto</label><input id="stockSearch" placeholder="Digite o nome"><div id="productList"></div>
 </section>
+
 <section id="vendas" class="page">
  <h2>Histórico de vendas</h2>
  <div class="row"><div><label for="salesStart">Data inicial</label><input id="salesStart" type="date"></div><div><label for="salesEnd">Data final</label><input id="salesEnd" type="date"></div></div>
  <div class="actions"><button class="primary" id="filterSales">Filtrar vendas</button><button id="resetSalesFilter">Hoje</button><button id="exportSales">Exportar CSV</button></div>
  <div class="grid"><div class="stat"><small>Total vendido</small><strong id="salesTotal">R$ 0,00</strong></div><div class="stat"><small>Registros</small><strong id="salesCount">0</strong></div></div><div id="salesList"></div>
 </section>
+
 <section id="caixa" class="page">
  <h2>Caixa e saldo disponível</h2><p class="intro">Ajuste o dinheiro disponível e registre entradas e retiradas manuais.</p>
  <div class="grid">
@@ -202,12 +219,14 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
  <h3>Movimentações do caixa</h3><div id="cashMovementList"></div><h3>Despesas registradas</h3><div id="expenseList"></div>
  <p class="muted">O saldo disponível é uma estimativa do caixa físico: saldo ajustado + vendas pagas em dinheiro − despesas pagas em dinheiro + movimentações manuais. Pix e cartão são contabilizados separadamente nas entradas totais.</p>
 </section>
+
 <section id="relatorios" class="page">
  <h2>Relatórios</h2>
  <div class="panel"><div class="row"><div><label for="reportStart">Data inicial</label><input id="reportStart" type="date"></div><div><label for="reportEnd">Data final</label><input id="reportEnd" type="date"></div></div><div class="actions"><button class="primary" id="makeReport">Gerar relatório</button><button id="reportMonth">Mês atual</button></div></div>
  <div class="grid"><div class="stat"><small>Vendas pagas</small><strong id="reportSales">R$ 0,00</strong></div><div class="stat"><small>Despesas</small><strong id="reportExpenses">R$ 0,00</strong></div><div class="stat"><small>Resultado</small><strong id="reportResult">R$ 0,00</strong></div></div>
  <div class="panel"><h3>Vendas por forma de pagamento</h3><div id="paymentReport"></div></div><div class="panel"><h3>Vendas por dia</h3><div id="dailyReport"></div></div><div class="panel"><h3>Vendas por mês</h3><div id="monthlyReport"></div></div>
 </section>
+
 <section id="dados" class="page">
  <h2>Backup e dados</h2>
  <div class="panel"><h3>Salvar backup</h3><p class="muted">Baixe uma cópia dos dados salvos neste navegador.</p><button class="primary" id="backupBtn">Baixar backup JSON</button></div>
@@ -215,6 +234,7 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
  <div class="panel"><h3>Integridade dos dados</h3><p id="dataStatus" class="muted"></p><button id="refreshAll">Atualizar telas</button></div>
 </section>
 </main>
+
 <footer>GESTÃO INHO DÚ CORTE · CONTROLE PROFISSIONAL</footer>
 <div id="toast" role="status"></div>
 
@@ -435,8 +455,6 @@ $("qtyMinus").addEventListener("click",()=>{
  $("quickQty").value=Math.max(1,Math.floor(num($("quickQty").value))-1);
  updateQuickTotal();
 });
-
-/* CORREÇÃO DO ERRO DE SINTAXE: o botão + agora funciona normalmente. */
 $("qtyPlus").addEventListener("click",()=>{
  $("quickQty").value=Math.max(1,Math.floor(num($("quickQty").value))+1);
  updateQuickTotal();
@@ -497,15 +515,25 @@ function resetProductForm(){
  $("productMin").value="2";$("productPhoto").value="";currentPhoto="";
  $("photoPreview").innerHTML="";$("productFormTitle").textContent="Cadastrar produto";$("cancelEdit").hidden=true;
 }
+
+/* Fotos sem bloqueio artificial de tamanho.
+   A capacidade de armazenamento do navegador ainda se aplica. */
 $("productPhoto").addEventListener("change",()=>{
  const f=$("productPhoto").files[0];if(!f)return;
- if(!f.type.startsWith("image/")){toast("Selecione um arquivo de imagem válido.");$("productPhoto").value="";return}
- if(f.size>700*1024){toast("A imagem deve ter até 700 KB.");$("productPhoto").value="";return}
+ if(!f.type.startsWith("image/")){
+  toast("Selecione um arquivo de imagem válido.");
+  $("productPhoto").value="";
+  return;
+ }
  const reader=new FileReader();
- reader.onload=()=>{currentPhoto=String(reader.result);$("photoPreview").innerHTML=`<img class="product-photo" alt="Prévia do produto" src="${esc(currentPhoto)}">`};
+ reader.onload=()=>{
+  currentPhoto=String(reader.result);
+  $("photoPreview").innerHTML=`<img class="product-photo" alt="Prévia do produto" src="${esc(currentPhoto)}">`;
+ };
  reader.onerror=()=>toast("Não foi possível ler a imagem.");
  reader.readAsDataURL(f);
 });
+
 $("saveProduct").addEventListener("click",()=>{
  const name=$("productName").value.trim();if(!name){toast("Informe o nome do produto.");return}
  const price=num($("productPrice").value),cost=num($("productCost").value),stock=num($("productStock").value),min=num($("productMin").value);
@@ -514,15 +542,22 @@ $("saveProduct").addEventListener("click",()=>{
  const id=$("productId").value;
  if(id){
   const p=products.find(x=>x.id===id);if(!p)return;
-  p.name=name;p.price=price;p.cost=cost;p.stock=stock;p.min=min;if(currentPhoto)p.photo=currentPhoto;
+  p.name=name;p.price=price;p.cost=cost;p.stock=stock;p.min=min;
+  if(currentPhoto)p.photo=currentPhoto;
   logEvent("produto_editado",name);
  }else{
   products.push({id:uid(),name,price,cost,stock,min,photo:currentPhoto});
   logEvent("produto_cadastrado",name);
  }
- persist();resetProductForm();renderAll();toast("Produto salvo com sucesso.");
+ try{
+  persist();resetProductForm();renderAll();toast("Produto salvo com sucesso.");
+ }catch(e){
+  console.error(e);
+  toast("Não foi possível salvar. A foto pode ser grande demais para o armazenamento do navegador. Tente uma imagem menor.");
+ }
 });
 $("cancelEdit").addEventListener("click",resetProductForm);
+
 function editProduct(id){
  const p=products.find(x=>x.id===id);if(!p)return;
  $("productId").value=p.id;$("productName").value=p.name;$("productPrice").value=p.price;
