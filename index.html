@@ -92,23 +92,23 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <label for="assistantText">Descreva o consumo</label><textarea id="assistantText" placeholder="Ex.: João pegou duas águas"></textarea>
 <div class="actions"><button class="primary" id="processText">Registrar consumo</button><button id="clearText">Limpar texto</button></div>
 <hr><h3>Lançamento de produto na conta</h3>
-<label for="manualCustomer">Nome do cliente</label><input id="manualCustomer" placeholder="Nome do cliente">
-<label for="manualProduct">Produto</label><select id="manualProduct"></select>
-<label for="manualQty">Quantidade</label><input id="manualQty" type="number" min="1" step="1" value="1">
-<div class="actions"><button class="primary" id="manualAdd">Adicionar à conta</button></div>
-</div>
-<div class="panel">
 <h3>⚡ Venda rápida</h3>
 <label for="quickProduct">Produto</label><select id="quickProduct"></select>
 <div class="row">
 <div><label for="quickQty">Quantidade</label><div class="qty-control"><button id="qtyMinus" type="button">−</button><input id="quickQty" type="number" min="1" step="1" value="1"><button id="qtyPlus" type="button">+</button></div></div>
 <div><label for="quickCustomer">Cliente (opcional)</label><input id="quickCustomer" placeholder="Nome do cliente"></div>
 </div>
+<div class="panel">
 <label>Forma de pagamento</label>
 <div class="method-grid" id="paymentMethods">
 <button type="button" class="method-option selected" data-method="Dinheiro">💵 Dinheiro</button>
 <button type="button" class="method-option" data-method="Pix">▦ Pix</button>
 <button type="button" class="method-option" data-method="Cartão">▤ Cartão</button>
+</div>
+<label for="manualCustomer">Nome do cliente</label><input id="manualCustomer" placeholder="Nome do cliente">
+<label for="manualProduct">Produto</label><select id="manualProduct"></select>
+<label for="manualQty">Quantidade</label><input id="manualQty" type="number" min="1" step="1" value="1">
+<div class="actions"><button class="primary" id="manualAdd">Adicionar à conta</button></div>
 </div>
 <div class="panel">
 <label for="quickMode">Situação</label><select id="quickMode"><option value="paid">Venda paga</option><option value="account">Anotar na conta</option></select>
