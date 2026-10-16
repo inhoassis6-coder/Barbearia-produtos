@@ -101,11 +101,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <button type="button" class="method-option" data-method="Pix">▦ Pix</button>
 <button type="button" class="method-option" data-method="Cartão">▤ Cartão</button>
 </div>
-<label for="quickMode">Situação</label><select id="quickMode"><option value="paid">Venda paga</option><option value="account">Anotar na conta</option></select>
-<div class="quick-total"><div><span class="muted">Total</span><br><strong id="quickTotal">R$ 0,00</strong></div><div class="muted" id="quickStock">Estoque: —</div></div>
-<button type="button" class="primary" id="quickSell" style="width:100%;margin-top:14px">✓ Confirmar venda</button>
-<div class="actions"><button id="quickClear" type="button">Limpar campos</button></div>
-</div>
 <div class="panel">
 <h3>Assistente por texto</h3><p class="muted">Exemplo: João pegou duas águas.</p>
 <label for="assistantText">Descreva o consumo</label><textarea id="assistantText" placeholder="Ex.: João pegou duas águas"></textarea>
@@ -116,8 +111,12 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <label for="manualQty">Quantidade</label><input id="manualQty" type="number" min="1" step="1" value="1">
 <div class="actions"><button class="primary" id="manualAdd">Adicionar à conta</button></div>
 </div>
+<label for="quickMode">Situação</label><select id="quickMode"><option value="paid">Venda paga</option><option value="account">Anotar na conta</option></select>
+<div class="quick-total"><div><span class="muted">Total</span><br><strong id="quickTotal">R$ 0,00</strong></div><div class="muted" id="quickStock">Estoque: —</div></div>
+<button type="button" class="primary" id="quickSell" style="width:100%;margin-top:14px">✓ Confirmar venda</button>
+<div class="actions"><button id="quickClear" type="button">Limpar campos</button></div>
+</div>
 </section>
-
 <section id="inicio" class="page">
 <h2>Painel da barbearia</h2><p class="intro">Resumo da operação.</p>
 <div class="grid">
@@ -680,38 +679,6 @@ function initialize(){
  renderAll();
 }
 try{initialize()}catch(e){console.error(e);toast("Erro ao iniciar. Faça backup e confira o código.")}
-})();
-<!-- AJUSTE: Assistente primeiro na tela -->
-<style>
-  #assistente .hero {
-    border: 1px solid #55451f;
-    background: radial-gradient(ellipse at top right, #3b3018, #141416 76%);
-    border-radius: 16px;
-    padding: 12px;
-    margin-bottom: 10px;
-  }
-  #assistente .hero h2 { color: var(--gold2); font-size: 20px; margin: 0 0 5px; }
-  #assistente .hero p { color: #c0bdaf; font-size: 13px; line-height: 1.45; margin: 0; }
-  #assistente #assistantText { min-height: 58px; }
-  #assistente .panel { padding: 12px; }
-</style>
-<script>
-(function () {
-  const section = document.getElementById("assistente");
-  if (!section) return;
-
-  const assistantPanel = section.querySelector("#assistantText")?.closest(".panel");
-  if (!assistantPanel) return;
-
-  const hero = document.createElement("div");
-  hero.className = "hero";
-  hero.innerHTML =
-    '<h2>✦ Assistente Inho Dú Corte</h2>' +
-    '<p>Escreva o que aconteceu, do seu jeito. Ex.: João pegou duas águas.</p>';
-
-  // Coloca o assistente no topo, antes da venda rápida e dos indicadores.
-  section.insertBefore(hero, section.firstChild);
-  section.insertBefore(assistantPanel, hero.nextSibling);
 })();
 </script>
 </body>
