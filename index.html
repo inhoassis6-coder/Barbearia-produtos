@@ -88,6 +88,15 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <div class="stat"><small>Vendas de hoje</small><strong id="quickTodaySales">R$ 0,00</strong></div>
 <div class="stat"><small>Dinheiro disponível</small><strong id="quickCash">R$ 0,00</strong></div>
 </div>
+<h3>Assistente por texto</h3><p class="muted">Exemplo: João pegou duas águas.</p>
+<label for="assistantText">Descreva o consumo</label><textarea id="assistantText" placeholder="Ex.: João pegou duas águas"></textarea>
+<div class="actions"><button class="primary" id="processText">Registrar consumo</button><button id="clearText">Limpar texto</button></div>
+<hr><h3>Lançamento de produto na conta</h3>
+<label for="manualCustomer">Nome do cliente</label><input id="manualCustomer" placeholder="Nome do cliente">
+<label for="manualProduct">Produto</label><select id="manualProduct"></select>
+<label for="manualQty">Quantidade</label><input id="manualQty" type="number" min="1" step="1" value="1">
+<div class="actions"><button class="primary" id="manualAdd">Adicionar à conta</button></div>
+</div>
 <div class="panel">
 <h3>⚡ Venda rápida</h3>
 <label for="quickProduct">Produto</label><select id="quickProduct"></select>
@@ -102,15 +111,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <button type="button" class="method-option" data-method="Cartão">▤ Cartão</button>
 </div>
 <div class="panel">
-<h3>Assistente por texto</h3><p class="muted">Exemplo: João pegou duas águas.</p>
-<label for="assistantText">Descreva o consumo</label><textarea id="assistantText" placeholder="Ex.: João pegou duas águas"></textarea>
-<div class="actions"><button class="primary" id="processText">Registrar consumo</button><button id="clearText">Limpar texto</button></div>
-<hr><h3>Lançamento de produto na conta</h3>
-<label for="manualCustomer">Nome do cliente</label><input id="manualCustomer" placeholder="Nome do cliente">
-<label for="manualProduct">Produto</label><select id="manualProduct"></select>
-<label for="manualQty">Quantidade</label><input id="manualQty" type="number" min="1" step="1" value="1">
-<div class="actions"><button class="primary" id="manualAdd">Adicionar à conta</button></div>
-</div>
 <label for="quickMode">Situação</label><select id="quickMode"><option value="paid">Venda paga</option><option value="account">Anotar na conta</option></select>
 <div class="quick-total"><div><span class="muted">Total</span><br><strong id="quickTotal">R$ 0,00</strong></div><div class="muted" id="quickStock">Estoque: —</div></div>
 <button type="button" class="primary" id="quickSell" style="width:100%;margin-top:14px">✓ Confirmar venda</button>
