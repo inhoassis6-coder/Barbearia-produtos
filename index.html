@@ -98,6 +98,11 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <div><label for="quickQty">Quantidade</label><div class="qty-control"><button id="qtyMinus" type="button">−</button><input id="quickQty" type="number" min="1" step="1" value="1"><button id="qtyPlus" type="button">+</button></div></div>
 <div><label for="quickCustomer">Cliente (opcional)</label><input id="quickCustomer" placeholder="Nome do cliente"></div>
 </div>
+<label for="quickMode">Situação</label><select id="quickMode"><option value="paid">Venda paga</option><option value="account">Anotar na conta</option></select>
+<div class="quick-total"><div><span class="muted">Total</span><br><strong id="quickTotal">R$ 0,00</strong></div><div class="muted" id="quickStock">Estoque: —</div></div>
+<button type="button" class="primary" id="quickSell" style="width:100%;margin-top:14px">✓ Confirmar venda</button>
+<div class="actions"><button id="quickClear" type="button">Limpar campos</button></div>
+</div>
 <div class="panel">
 <label>Forma de pagamento</label>
 <div class="method-grid" id="paymentMethods">
@@ -106,11 +111,6 @@ footer{text-align:center;color:var(--muted);font-size:11px;padding:24px}
 <button type="button" class="method-option" data-method="Cartão">▤ Cartão</button>
 </div>
 <div class="panel">
-<label for="quickMode">Situação</label><select id="quickMode"><option value="paid">Venda paga</option><option value="account">Anotar na conta</option></select>
-<div class="quick-total"><div><span class="muted">Total</span><br><strong id="quickTotal">R$ 0,00</strong></div><div class="muted" id="quickStock">Estoque: —</div></div>
-<button type="button" class="primary" id="quickSell" style="width:100%;margin-top:14px">✓ Confirmar venda</button>
-<div class="actions"><button id="quickClear" type="button">Limpar campos</button></div>
-</div>
 <label for="manualCustomer">Nome do cliente</label><input id="manualCustomer" placeholder="Nome do cliente">
 <label for="manualProduct">Produto</label><select id="manualProduct"></select>
 <label for="manualQty">Quantidade</label><input id="manualQty" type="number" min="1" step="1" value="1">
